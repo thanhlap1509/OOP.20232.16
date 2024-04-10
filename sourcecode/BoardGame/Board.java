@@ -17,7 +17,7 @@ public class Board {
         board[length - 1].next = board[0];
     }
     public void display(){
-        System.out.print("\t");
+        System.out.print(" ".repeat(4));
         for (int i = 11; i >= 7; i--){
             System.out.print( "|" + board[i].small + " " + board[i].large + "|" +  " ");
         }
@@ -25,7 +25,7 @@ public class Board {
         System.out.print("|" + board[0].small + " " + board[0].large + "|" + " ");
         System.out.print(" ".repeat(26));
         System.out.println("|" + board[6].small + " " + board[6].large + "|" + " ");
-        System.out.print("\t");
+        System.out.print(" ".repeat(4));
         for (int i = 1; i <= 5; i++){
             System.out.print("|"+ board[i].small + " " + board[i].large + "|" + " ");
         }
