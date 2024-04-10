@@ -17,9 +17,17 @@ public class Board {
         board[length - 1].next = board[0];
     }
     public void display(){
-        for (int i = 0; i < length;i++){
-            System.out.println("Square" + (i + 1) + " has " + board[i].small + " small and " + board[i].large + " large rock");
+        System.out.print("\t");
+        for (int i = 11; i >= 7; i--){
+            System.out.print( "|" + board[i].small + " " + board[i].large + "|" +  " ");
+        }
+        System.out.println();
+        System.out.print("|" + board[0].small + " " + board[0].large + "|" + " ");
+        System.out.print(" ".repeat(26));
+        System.out.println("|" + board[6].small + " " + board[6].large + "|" + " ");
+        System.out.print("\t");
+        for (int i = 1; i <= 5; i++){
+            System.out.print("|"+ board[i].small + " " + board[i].large + "|" + " ");
         }
     }
-
 }
