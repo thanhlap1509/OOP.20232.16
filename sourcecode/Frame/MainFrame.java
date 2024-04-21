@@ -8,11 +8,11 @@ import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class MyFrame extends JFrame implements ActionListener{
+public class MainFrame extends JFrame implements ActionListener{
     JButton startButton;
     JButton helpButton;
     JButton exitButton;
-    public MyFrame(){
+    public MainFrame(){
         JLabel title = new JLabel("O An Quan");
         title.setForeground(new Color(57, 255, 20));
         title.setFont(new Font("MV Boli", Font.PLAIN, 40));
@@ -53,6 +53,9 @@ public class MyFrame extends JFrame implements ActionListener{
             if (result == JOptionPane.YES_OPTION){
                 this.dispose();
             }
+        }
+        else if (e.getSource() == helpButton){
+
         }
     }
 }
