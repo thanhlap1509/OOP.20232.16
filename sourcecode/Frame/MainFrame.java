@@ -7,6 +7,10 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class MainFrame extends JFrame implements ActionListener{
     JButton startButton;
@@ -45,7 +49,17 @@ public class MainFrame extends JFrame implements ActionListener{
         this.add(helpButton);
         this.add(exitButton);
     }
-
+    public void showGuideline() throws IOException{
+        BufferedReader br = new BufferedReader(new FileReader("sourcecode/guideline.txt"));
+        String buffer;
+        String final_text = "";
+        while ((buffer = br.readLine()) != null){
+            final_text += buffer + "\n";
+        }
+        JOptionPane.showMessageDialog(this, final_text, "Game Rule", JOptionPane.PLAIN_MESSAGE);
+        br.close();
+        return;
+    }
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == exitButton){
@@ -55,7 +69,11 @@ public class MainFrame extends JFrame implements ActionListener{
             }
         }
         else if (e.getSource() == helpButton){
-
+            try {
+                this.showGuideline();
+            } catch (IOException ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 }
