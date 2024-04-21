@@ -37,7 +37,7 @@ public class MainFrame extends JFrame implements ActionListener{
         exitButton.setFocusable(false);
         exitButton.addActionListener(this);
 
-        this.setTitle("Game Window");
+        this.setTitle("Main Window");
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLayout(null);
         this.setSize(500, 500);
@@ -74,6 +74,10 @@ public class MainFrame extends JFrame implements ActionListener{
             } catch (IOException ex) {
                 throw new RuntimeException(ex);
             }
+        }
+        else if (e.getSource() == startButton){
+            this.dispose();
+            GameFrame gameframe = new GameFrame();
         }
     }
 }
