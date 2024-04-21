@@ -13,8 +13,10 @@ public class Board {
                 board[i] = new Node(5, 0);
             }
             board[i - 1].next = board[i];
+            board[i].prev = board[i - 1];
         }
         board[length - 1].next = board[0];
+        board[0].prev = board[length - 1];
     }
     public void display(){
         System.out.print(" ".repeat(4));
