@@ -1,8 +1,8 @@
 package sourcecode;
 import sourcecode.BoardGame.*;
+import sourcecode.Frame.MyFrame;
 public class Main {
     public static void main(String[] args){
-        Board board = new Board();
-        board.display();
+        MyFrame frame = new MyFrame();
     }
 }
