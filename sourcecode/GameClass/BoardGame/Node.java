@@ -1,4 +1,4 @@
-package sourcecode.BoardGame;
+package sourcecode.GameClass.BoardGame;
 
 public class Node {
     public int small;
