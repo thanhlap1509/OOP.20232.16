@@ -1,4 +1,4 @@
-package sourcecode.BoardGame;
+package sourcecode.GameClass.BoardGame;
 public class Board {
     public Node[] board;
     final static int length = 12;

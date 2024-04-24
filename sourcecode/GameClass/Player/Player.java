@@ -1,4 +1,4 @@
-package sourcecode.Player;
+package sourcecode.GameClass.Player;
 
 public class Player {
     private String name;

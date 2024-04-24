@@ -41,6 +41,7 @@ public class MainFrame extends JFrame implements ActionListener{
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLayout(null);
         this.setSize(500, 500);
+        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
         this.getContentPane().setBackground(new Color(0, 0, 0));
@@ -49,6 +50,7 @@ public class MainFrame extends JFrame implements ActionListener{
         this.add(helpButton);
         this.add(exitButton);
     }
+    //help window
     public void showGuideline() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("sourcecode/guideline.txt"));
         String buffer;
