@@ -58,7 +58,7 @@ public class MainFrame extends JFrame implements ActionListener{
         while ((buffer = br.readLine()) != null){
             final_text += buffer + "\n";
         }
-        JOptionPane.showMessageDialog(this, final_text, "Game Rule", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this, final_text, "Game Rule", JOptionPane.INFORMATION_MESSAGE);
         br.close();
         return;
     }
