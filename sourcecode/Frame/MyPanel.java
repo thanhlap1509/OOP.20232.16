@@ -114,7 +114,7 @@ public class MyPanel extends JPanel implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("You are touching " + this.i + " tile");
+        //System.out.println("You are touching " + this.i + " tile");
         ((JPanel) e.getSource()).repaint();
         ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         this.showArrow = true;

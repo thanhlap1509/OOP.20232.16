@@ -97,6 +97,7 @@ public class GameFrame extends JFrame implements MouseListener {
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
         //Board game
+        JPanel boardGameContainer = new JPanel();
         //left tiles
         MyPanel leftTile = new MyPanel("left");
         //right tiles
@@ -123,6 +124,10 @@ public class GameFrame extends JFrame implements MouseListener {
         //add upper and lower row in center tiles
         centerTiles.add(upper);
         centerTiles.add(lower);
+        //add all container in one board game container
+        boardGameContainer.add(leftTile);
+        boardGameContainer.add(centerTiles);
+        boardGameContainer.add(rightTile);
         //frame
         this.setTitle("Game Frame");
         this.setJMenuBar(menuBar);
