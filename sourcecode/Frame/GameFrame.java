@@ -10,9 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.TimerTask;
 import java.util.Timer;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 825;
@@ -39,7 +36,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private int secondCountDown;
     private Timer timer;
     private int turn;
-    private boolean clickable = true;
+
     GameFrame() {
         // try-catch reading png file into image instances then convert to image icon
         BufferedImage p1BuffImg = null;
@@ -192,18 +189,14 @@ public class GameFrame extends JFrame implements MouseListener {
             timer.cancel();
             this.dispose();
         }
-        else if (e.getSource() instanceof MyPanel && clickable){
-            if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth && clickable){
-                clickable = false;
+        else if (e.getSource() instanceof MyPanel){
+            if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
                 System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
                 passingRock();
-                clickable = true;
             }
-            else if (e.getX() >= ((MyPanel)e.getSource()).arrowWidth * 3 && clickable){
-                clickable = false;
+            else if (e.getX() >= ((MyPanel)e.getSource()).arrowWidth * 3){
                 System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
                 passingRock();
-                clickable = true;
             }
         }
     }
@@ -219,7 +212,7 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel && clickable){
+        if (e.getSource() instanceof MyPanel){
             ((MyPanel) e.getSource()).setArrow(true);
             ((JPanel) e.getSource()).repaint();
             ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
@@ -228,22 +221,24 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel && clickable){
+        if (e.getSource() instanceof MyPanel){
             ((MyPanel) e.getSource()).setArrow(false);
             ((JPanel) e.getSource()).repaint();
             ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
         }
     }
     public void passingRock(){
+        this.setEnabled(false);
         System.out.println("Passing rock");
         for (int i = 0; i < 4; i++){
             try {
-                Thread.sleep(500); // Sleeping for 5 seconds
+                Thread.sleep(1000); // Sleeping for 0.5 seconds, total 2 seconds
                 System.out.println(".");
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
             }
         }
         System.out.println("Done");
+        this.setEnabled(true);
     }
 }
