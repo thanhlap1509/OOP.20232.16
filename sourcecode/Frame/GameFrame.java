@@ -6,12 +6,14 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.TimerTask;
 import java.util.Timer;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
+
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 825;
     final int HEADER_SIZE = 115;
@@ -29,9 +31,15 @@ public class GameFrame extends JFrame implements MouseListener {
     private Border indicatorBorder;
     private Border compoundBorder1;
     private Border compoundBorder2;
+    private JPanel boardGameContainer;
+    private MyPanel leftTile;
+    private MyPanel rightTile;
+    private MyPanel[] upperTiles;
+    private MyPanel[] lowerTiles;
     private int secondCountDown;
     private Timer timer;
     private int turn;
+    private boolean clickable = true;
     GameFrame() {
         // try-catch reading png file into image instances then convert to image icon
         BufferedImage p1BuffImg = null;
@@ -98,28 +106,32 @@ public class GameFrame extends JFrame implements MouseListener {
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
         //Board game
-        JPanel boardGameContainer = new JPanel();
+        boardGameContainer = new JPanel();
         //left tiles
-        MyPanel leftTile = new MyPanel("left");
+        leftTile = new MyPanel("left");
+        leftTile.addMouseListener(this);
         //right tiles
-        MyPanel rightTile = new MyPanel("right");
+        rightTile = new MyPanel("right");
+        rightTile.addMouseListener(this);
         //center tiles
         JPanel centerTiles = new JPanel();
         centerTiles.setLayout(new GridLayout(2, 1));
         //upper row
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
-        MyPanel[] upperTiles = new MyPanel[5];
+        upperTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
             upperTiles[i] = new MyPanel("center", "upper", 10 - i);
+            upperTiles[i].addMouseListener(this);
             upper.add(upperTiles[i]);
         }
         //lower row
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
-        MyPanel[] lowerTiles = new MyPanel[5];
+        lowerTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
             lowerTiles[i] = new MyPanel("center", "lower", i);
+            lowerTiles[i].addMouseListener(this);
             lower.add(lowerTiles[i]);
         }
         //add upper and lower row in center tiles
@@ -145,7 +157,7 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     private void timerCountDown(){
         timer = new Timer();
-        secondCountDown = 3;
+        secondCountDown = 10;
         if (turn == 1){
             player2Info.setBorder(null);
             player1Info.setBorder(compoundBorder1);
@@ -180,11 +192,24 @@ public class GameFrame extends JFrame implements MouseListener {
             timer.cancel();
             this.dispose();
         }
+        else if (e.getSource() instanceof MyPanel && clickable){
+            if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth && clickable){
+                clickable = false;
+                System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
+                passingRock();
+                clickable = true;
+            }
+            else if (e.getX() >= ((MyPanel)e.getSource()).arrowWidth * 3 && clickable){
+                clickable = false;
+                System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
+                passingRock();
+                clickable = true;
+            }
+        }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override
@@ -194,13 +219,31 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-
+        if (e.getSource() instanceof MyPanel && clickable){
+            ((MyPanel) e.getSource()).setArrow(true);
+            ((JPanel) e.getSource()).repaint();
+            ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-
+        if (e.getSource() instanceof MyPanel && clickable){
+            ((MyPanel) e.getSource()).setArrow(false);
+            ((JPanel) e.getSource()).repaint();
+            ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
+        }
     }
-
-
+    public void passingRock(){
+        System.out.println("Passing rock");
+        for (int i = 0; i < 4; i++){
+            try {
+                Thread.sleep(500); // Sleeping for 5 seconds
+                System.out.println(".");
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+        System.out.println("Done");
+    }
 }
