@@ -15,7 +15,8 @@ import java.util.Timer;
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 825;
     final int HEADER_SIZE = 115;
-    final Color HEADER_COLOR = new Color(255, 0, 255);
+    final Color HEADER_COLOR = Color.black;
+    final Color TEXT_COLOR = Color.white;
     private JLabel player1Info;
     private JLabel player2Info;
     private JLabel timerLabel;
@@ -52,12 +53,14 @@ public class GameFrame extends JFrame implements MouseListener {
         //player 1 container
         player1Info = new JLabel();
         player1Info.setText("<html>Name_1<br>Points: 0</html>");
+        player1Info.setForeground(TEXT_COLOR);
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
         player1Info.setVerticalTextPosition(JLabel.CENTER);
         //player 2 container
         player2Info = new JLabel();
         player2Info.setText("<html>Name_2<br>Points: 0</html>");
+        player2Info.setForeground(TEXT_COLOR);
         player2Info.setIcon(player2ImgIcon);
         player2Info.setHorizontalTextPosition(JLabel.LEFT);
         player2Info.setVerticalTextPosition(JLabel.CENTER);
@@ -67,11 +70,13 @@ public class GameFrame extends JFrame implements MouseListener {
         turn = 1;
         turnDisplayed = new JLabel();
         turnDisplayed.setBorder(new EmptyBorder(5, 5, 5, 5));
+        turnDisplayed.setForeground(TEXT_COLOR);
         turnDisplayed.setHorizontalAlignment(SwingConstants.CENTER);
         turnDisplayed.setVerticalAlignment(SwingConstants.TOP);
 
         timerLabel = new JLabel();
         timerLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
+        timerLabel.setForeground(TEXT_COLOR);
         timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
         timerLabel.setVerticalAlignment(SwingConstants.TOP);
         timerCountDown();
