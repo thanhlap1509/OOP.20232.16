@@ -98,7 +98,6 @@ public class GameFrame extends JFrame implements MouseListener {
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
         //Board game
-
         JPanel boardGameContainer = new JPanel();
         //left tiles
         MyPanel leftTile = new MyPanel("left");
@@ -166,7 +165,6 @@ public class GameFrame extends JFrame implements MouseListener {
                     secondCountDown--;
                 } else {
                     timer.cancel();
-                    //System.out.println("Finish turn of player " + turn);
                     if (turn == 1) turn = 2;
                     else turn = 1;
                     timerCountDown();
