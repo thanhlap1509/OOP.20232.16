@@ -17,6 +17,7 @@ public class GameFrame extends JFrame implements MouseListener {
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
+    final Color BOARD_COLOR = Color.green;
     private JLabel player1Info;
     private JLabel player2Info;
     private JLabel timerLabel;
@@ -97,6 +98,7 @@ public class GameFrame extends JFrame implements MouseListener {
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
         //Board game
+
         JPanel boardGameContainer = new JPanel();
         //left tiles
         MyPanel leftTile = new MyPanel("left");
@@ -125,9 +127,11 @@ public class GameFrame extends JFrame implements MouseListener {
         centerTiles.add(upper);
         centerTiles.add(lower);
         //add all container in one board game container
-        boardGameContainer.add(leftTile);
-        boardGameContainer.add(centerTiles);
-        boardGameContainer.add(rightTile);
+        boardGameContainer.setLayout(new BorderLayout());
+        boardGameContainer.add(leftTile, BorderLayout.WEST);
+        boardGameContainer.add(centerTiles, BorderLayout.CENTER);
+        boardGameContainer.add(rightTile, BorderLayout.EAST);
+        boardGameContainer.setBorder(BorderFactory.createLineBorder(BOARD_COLOR));
         //frame
         this.setTitle("Game Frame");
         this.setJMenuBar(menuBar);
@@ -137,9 +141,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setResizable(false);
         this.setLocationRelativeTo(null);
         this.add(gameInfo, BorderLayout.NORTH);
-        this.add(leftTile, BorderLayout.WEST);
-        this.add(centerTiles,BorderLayout.CENTER);
-        this.add(rightTile, BorderLayout.EAST);
+        this.add(boardGameContainer, BorderLayout.CENTER);
         this.setVisible(true);
     }
     private void timerCountDown(){
