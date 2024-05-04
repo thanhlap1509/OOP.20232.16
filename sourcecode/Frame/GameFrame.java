@@ -154,7 +154,7 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     private void timerCountDown(){
         timer = new Timer();
-        secondCountDown = 10;
+        secondCountDown = 60;
         if (turn == 1){
             player2Info.setBorder(null);
             player1Info.setBorder(compoundBorder1);
@@ -170,7 +170,6 @@ public class GameFrame extends JFrame implements MouseListener {
                 if (secondCountDown >= 0) {
                     String string = String.format("Timer: %02d:%02d", secondCountDown / 60, secondCountDown % 60);
                     timerLabel.setText(string);
-                    //System.out.println(secondCountDown);
                     secondCountDown--;
                 } else {
                     timer.cancel();
@@ -190,6 +189,7 @@ public class GameFrame extends JFrame implements MouseListener {
             this.dispose();
         }
         else if (e.getSource() instanceof MyPanel){
+            timer.cancel();
             if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
                 System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
                 passingRock();
@@ -198,6 +198,9 @@ public class GameFrame extends JFrame implements MouseListener {
                 System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
                 passingRock();
             }
+            if (turn == 1) turn = 2;
+            else turn = 1;
+            timerCountDown();
         }
     }
 
