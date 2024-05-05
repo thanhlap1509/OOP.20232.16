@@ -4,12 +4,14 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MyPanel extends JPanel {
-    String orientation;
-     static final int SIZE = 200;
+    private String orientation;
+
+    static final int SIZE = 200;
     static final int MARGIN = 7;
     private int i;
     final Color COLOR = Color.black;
     private String UoL;
+
     private boolean showArrow;
     public int arrowWidth;
     MyPanel(String ori){
@@ -58,25 +60,32 @@ public class MyPanel extends JPanel {
                     g2D.fillRect(MARGIN, MARGIN / 2, (getWidth() - MARGIN * 2), (int) (SIZE * 0.55) + MARGIN / 2);
                     g2D.setBackground(getBackground());
                 }
+                g2D.setPaint(Color.black);
+                // draw arrow if I let it
+                if (showArrow){
+                    arrowWidth = (int)(getWidth() / 4);
+                    int height = getHeight();
+                    // draw left arrow
+                    g2D.drawLine(MARGIN / 2, (int)(height / 2), arrowWidth, (int)(height / 4));
+                    g2D.drawLine(MARGIN / 2, (int)(height / 2), arrowWidth, (int)(height * 3 / 4));
+                    g2D.drawLine(arrowWidth, (int)(height / 4), arrowWidth, (int)(height * 3 / 4));
+                    //draw right arrow
+                    g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 4 - MARGIN / 2, (int)(height / 2));
+                    g2D.drawLine(arrowWidth * 3, (int)(height * 3 / 4), arrowWidth * 4 - MARGIN / 2, (int)(height / 2));
+                    g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 3, (int)(height * 3 / 4));
+                }
             }
         }
-        g2D.setPaint(Color.black);
-        // draw arrow if I let it
-        if (showArrow){
-            arrowWidth = (int)(getWidth() / 4);
-            int height = getHeight();
-            // draw left arrow
-            g2D.drawLine(MARGIN / 2, (int)(height / 2), arrowWidth, (int)(height / 4));
-            g2D.drawLine(MARGIN / 2, (int)(height / 2), arrowWidth, (int)(height * 3 / 4));
-            g2D.drawLine(arrowWidth, (int)(height / 4), arrowWidth, (int)(height * 3 / 4));
-            //draw right arrow
-            g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 4 - MARGIN / 2, (int)(height / 2));
-            g2D.drawLine(arrowWidth * 3, (int)(height * 3 / 4), arrowWidth * 4 - MARGIN / 2, (int)(height / 2));
-            g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 3, (int)(height * 3 / 4));
-        }
+
     }
     public int getI() {
         return i;
+    }
+    public String getOrientation() {
+        return orientation;
+    }
+    public String getUoL() {
+        return UoL;
     }
     public void setArrow(boolean value){
         showArrow = value;

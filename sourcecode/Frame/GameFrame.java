@@ -23,6 +23,8 @@ public class GameFrame extends JFrame implements MouseListener {
     private final JLabel timerLabel;
     private final JLabel turnDisplayed;
     private final JMenu exitMenu;
+    private MyPanel[] upperTiles;
+    private MyPanel[] lowerTiles;
     private final Border compoundBorder1;
     private final Border compoundBorder2;
     private int secondCountDown;
@@ -114,7 +116,7 @@ public class GameFrame extends JFrame implements MouseListener {
         //upper row
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
-        MyPanel[] upperTiles = new MyPanel[5];
+        upperTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
             upperTiles[i] = new MyPanel("center", "upper", 10 - i);
             upperTiles[i].addMouseListener(this);
@@ -123,7 +125,7 @@ public class GameFrame extends JFrame implements MouseListener {
         //lower row
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
-        MyPanel[] lowerTiles = new MyPanel[5];
+        lowerTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
             lowerTiles[i] = new MyPanel("center", "lower", i);
             lowerTiles[i].addMouseListener(this);
@@ -185,26 +187,24 @@ public class GameFrame extends JFrame implements MouseListener {
             timer.cancel();
             this.dispose();
         }
-        else if (e.getSource() instanceof MyPanel){
-            timer.cancel();
-            if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
-                System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
-                passingRock();
+        else if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+            if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
+                    || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
+                timer.cancel();
+                if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
+                    System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
+                    passingRock();
+                }
+                else if (e.getX() >= ((MyPanel)e.getSource()).arrowWidth * 3){
+                    System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
+                    passingRock();
+                }
+                timerCountDown();
             }
-            else if (e.getX() >= ((MyPanel)e.getSource()).arrowWidth * 3){
-                System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
-                passingRock();
-            }
-            timerCountDown();
+
         }
     }
 
-    private void updateText1() {
-        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
-    }
-    private void updateText2(){
-        player2Info.setText("<html><div style='text-align:right;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
-    }
     @Override
     public void mousePressed(MouseEvent e) {
     }
@@ -216,20 +216,23 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel){
-            ((MyPanel) e.getSource()).setArrow(true);
-            ((JPanel) e.getSource()).repaint();
-            ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+            if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
+                    || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
+                ((MyPanel) e.getSource()).setArrow(true);
+                ((JPanel) e.getSource()).repaint();
+                ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+            }
         }
     }
 
     @Override
     public void mouseExited(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel){
-            ((MyPanel) e.getSource()).setArrow(false);
-            ((JPanel) e.getSource()).repaint();
-            ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
-        }
+        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+                ((MyPanel) e.getSource()).setArrow(false);
+                ((JPanel) e.getSource()).repaint();
+                ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
+            }
     }
     public void passingRock(){
         this.setEnabled(false);
@@ -256,5 +259,11 @@ public class GameFrame extends JFrame implements MouseListener {
             updateText2();
             turn = 1;
         }
+    }
+    private void updateText1() {
+        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
+    }
+    private void updateText2(){
+        player2Info.setText("<html><div style='text-align:right;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
     }
 }
