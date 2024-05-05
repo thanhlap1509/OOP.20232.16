@@ -16,12 +16,10 @@ public class GameFrame extends JFrame implements MouseListener {
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
-    final Color BOARD_COLOR = Color.green;
     private JLabel player1Info;
     private JLabel player2Info;
     private JLabel timerLabel;
     private JLabel turnDisplayed;
-    private JMenuBar menuBar;
     private JMenu exitMenu;
     private Border paddingBorder1;
     private Border paddingBorder2;
@@ -36,8 +34,16 @@ public class GameFrame extends JFrame implements MouseListener {
     private int secondCountDown;
     private Timer timer;
     private int turn;
+    private String name1;
+    private String name2;
+    private int point1;
+    private int point2;
 
     GameFrame() {
+        name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
+        name2 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
+        point1 = 0;
+        point2 = 0;
         // try-catch reading png file into image instances then convert to image icon
         BufferedImage p1BuffImg = null;
         BufferedImage p2BuffImg = null;
@@ -58,14 +64,14 @@ public class GameFrame extends JFrame implements MouseListener {
         compoundBorder2 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder2);
         //player 1 container
         player1Info = new JLabel();
-        player1Info.setText("<html>Name_1<br>Points: 0</html>");
+        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
         player1Info.setForeground(TEXT_COLOR);
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
         player1Info.setVerticalTextPosition(JLabel.CENTER);
         //player 2 container
         player2Info = new JLabel();
-        player2Info.setText("<html>Name_2<br>Points: 0</html>");
+        player2Info.setText("<html><div style='text-align:right;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
         player2Info.setForeground(TEXT_COLOR);
         player2Info.setIcon(player2ImgIcon);
         player2Info.setHorizontalTextPosition(JLabel.LEFT);
@@ -98,7 +104,7 @@ public class GameFrame extends JFrame implements MouseListener {
         gameInfo.add(gameStatus, BorderLayout.CENTER);
         gameInfo.add(player2Info, BorderLayout.EAST);
         //menu bar
-        menuBar = new JMenuBar();
+        JMenuBar menuBar = new JMenuBar();
         exitMenu = new JMenu("Exit");
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
@@ -139,7 +145,6 @@ public class GameFrame extends JFrame implements MouseListener {
         boardGameContainer.add(leftTile, BorderLayout.WEST);
         boardGameContainer.add(centerTiles, BorderLayout.CENTER);
         boardGameContainer.add(rightTile, BorderLayout.EAST);
-        boardGameContainer.setBorder(BorderFactory.createLineBorder(BOARD_COLOR));
         //frame
         this.setTitle("Game Frame");
         this.setJMenuBar(menuBar);
@@ -158,12 +163,12 @@ public class GameFrame extends JFrame implements MouseListener {
         if (turn == 1){
             player2Info.setBorder(null);
             player1Info.setBorder(compoundBorder1);
-            turnDisplayed.setText("Current turn: " + "Name_1");
+            turnDisplayed.setText("Current turn: " + name1);
         }
         else {
             player1Info.setBorder(null);
             player2Info.setBorder(compoundBorder2);
-            turnDisplayed.setText("Current turn: " + "Name_2");
+            turnDisplayed.setText("Current turn: " + name2);
         }
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -198,12 +203,16 @@ public class GameFrame extends JFrame implements MouseListener {
                 System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
                 passingRock();
             }
-            if (turn == 1) turn = 2;
-            else turn = 1;
             timerCountDown();
         }
     }
 
+    private void updateText1() {
+        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
+    }
+    private void updateText2(){
+        player2Info.setText("<html><div style='text-align:right;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
+    }
     @Override
     public void mousePressed(MouseEvent e) {
     }
@@ -243,5 +252,17 @@ public class GameFrame extends JFrame implements MouseListener {
         }
         System.out.println("Done");
         this.setEnabled(true);
+        if (turn == 1) {
+            //update point 1, for now I will leave it to update by 1 for demonstration’s sake
+            point1 += 1;
+            updateText1();
+            turn = 2;
+        }
+        else {
+            //update point 2, for now I will leave it to update by 1 for demonstration’s sake
+            point2 += 1;
+            updateText2();
+            turn = 1;
+        }
     }
 }
