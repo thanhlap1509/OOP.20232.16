@@ -34,6 +34,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private int point2;
 
     GameFrame() {
+        //getting name for two player and initiate point = 0
         name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
         name2 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
         point1 = 0;
@@ -51,6 +52,7 @@ public class GameFrame extends JFrame implements MouseListener {
         ImageIcon player1ImgIcon = new ImageIcon(player1Img);
         Image player2Img = p2BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
         ImageIcon player2ImgIcon = new ImageIcon(player2Img);
+        //create two border, one for apply padding, one to paint with color and combine into compound border to indicate turn
         Border paddingBorder1 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
         Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 5, 0, 0);
         Border indicatorBorder = BorderFactory.createLineBorder(Color.yellow, 2);
@@ -97,23 +99,23 @@ public class GameFrame extends JFrame implements MouseListener {
         gameInfo.add(player1Info,BorderLayout.WEST);
         gameInfo.add(gameStatus, BorderLayout.CENTER);
         gameInfo.add(player2Info, BorderLayout.EAST);
-        //menu bar
+            //menu bar
         JMenuBar menuBar = new JMenuBar();
         exitMenu = new JMenu("Exit");
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
         //Board game
         JPanel boardGameContainer = new JPanel();
-        //left tiles
+            //left tiles
         MyPanel leftTile = new MyPanel("left");
         leftTile.addMouseListener(this);
-        //right tiles
+            //right tiles
         MyPanel rightTile = new MyPanel("right");
         rightTile.addMouseListener(this);
-        //center tiles
+            //center tiles
         JPanel centerTiles = new JPanel();
         centerTiles.setLayout(new GridLayout(2, 1));
-        //upper row
+                //upper row
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
         upperTiles = new MyPanel[5];
@@ -122,7 +124,7 @@ public class GameFrame extends JFrame implements MouseListener {
             upperTiles[i].addMouseListener(this);
             upper.add(upperTiles[i]);
         }
-        //lower row
+                //lower row
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
         lowerTiles = new MyPanel[5];
@@ -131,7 +133,7 @@ public class GameFrame extends JFrame implements MouseListener {
             lowerTiles[i].addMouseListener(this);
             lower.add(lowerTiles[i]);
         }
-        //add upper and lower row in center tiles
+                //add upper and lower row in center tiles
         centerTiles.add(upper);
         centerTiles.add(lower);
         //add all container in one board game container
@@ -152,6 +154,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setVisible(true);
     }
     private void timerCountDown(){
+        //create timer, changing header display according to turn
         timer = new Timer();
         secondCountDown = 60;
         if (turn == 1){
@@ -187,7 +190,9 @@ public class GameFrame extends JFrame implements MouseListener {
             timer.cancel();
             this.dispose();
         }
+        //only accept center square
         else if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+            // enable lower tiles access for player 1 and upper tiles for player 2
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
                 timer.cancel();
@@ -217,6 +222,7 @@ public class GameFrame extends JFrame implements MouseListener {
     @Override
     public void mouseEntered(MouseEvent e) {
         if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+            // enable lower tiles access for player 1 and upper tiles for player 2
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
                 ((MyPanel) e.getSource()).setArrow(true);
@@ -235,6 +241,7 @@ public class GameFrame extends JFrame implements MouseListener {
             }
     }
     public void passingRock(){
+        //dummy method, will change later
         this.setEnabled(false);
         System.out.println("Passing rock");
         for (int i = 0; i < 4; i++){
