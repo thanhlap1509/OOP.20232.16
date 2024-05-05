@@ -16,26 +16,18 @@ public class GameFrame extends JFrame implements MouseListener {
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
-    private JLabel player1Info;
-    private JLabel player2Info;
-    private JLabel timerLabel;
-    private JLabel turnDisplayed;
-    private JMenu exitMenu;
-    private Border paddingBorder1;
-    private Border paddingBorder2;
-    private Border indicatorBorder;
-    private Border compoundBorder1;
-    private Border compoundBorder2;
-    private JPanel boardGameContainer;
-    private MyPanel leftTile;
-    private MyPanel rightTile;
-    private MyPanel[] upperTiles;
-    private MyPanel[] lowerTiles;
+    private final String name1;
+    private final String name2;
+    private final JLabel player1Info;
+    private final JLabel player2Info;
+    private final JLabel timerLabel;
+    private final JLabel turnDisplayed;
+    private final JMenu exitMenu;
+    private final Border compoundBorder1;
+    private final Border compoundBorder2;
     private int secondCountDown;
     private Timer timer;
     private int turn;
-    private String name1;
-    private String name2;
     private int point1;
     private int point2;
 
@@ -57,9 +49,9 @@ public class GameFrame extends JFrame implements MouseListener {
         ImageIcon player1ImgIcon = new ImageIcon(player1Img);
         Image player2Img = p2BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
         ImageIcon player2ImgIcon = new ImageIcon(player2Img);
-        paddingBorder1 =  BorderFactory.createEmptyBorder(0, 0, 0, 5);
-        paddingBorder2 =  BorderFactory.createEmptyBorder(0, 5, 0, 0);
-        indicatorBorder = BorderFactory.createLineBorder(Color.yellow, 2);
+        Border paddingBorder1 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
+        Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+        Border indicatorBorder = BorderFactory.createLineBorder(Color.yellow, 2);
         compoundBorder1 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder1);
         compoundBorder2 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder2);
         //player 1 container
@@ -109,12 +101,12 @@ public class GameFrame extends JFrame implements MouseListener {
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
         //Board game
-        boardGameContainer = new JPanel();
+        JPanel boardGameContainer = new JPanel();
         //left tiles
-        leftTile = new MyPanel("left");
+        MyPanel leftTile = new MyPanel("left");
         leftTile.addMouseListener(this);
         //right tiles
-        rightTile = new MyPanel("right");
+        MyPanel rightTile = new MyPanel("right");
         rightTile.addMouseListener(this);
         //center tiles
         JPanel centerTiles = new JPanel();
@@ -122,7 +114,7 @@ public class GameFrame extends JFrame implements MouseListener {
         //upper row
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
-        upperTiles = new MyPanel[5];
+        MyPanel[] upperTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
             upperTiles[i] = new MyPanel("center", "upper", 10 - i);
             upperTiles[i].addMouseListener(this);
@@ -131,7 +123,7 @@ public class GameFrame extends JFrame implements MouseListener {
         //lower row
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
-        lowerTiles = new MyPanel[5];
+        MyPanel[] lowerTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
             lowerTiles[i] = new MyPanel("center", "lower", i);
             lowerTiles[i].addMouseListener(this);
@@ -163,12 +155,12 @@ public class GameFrame extends JFrame implements MouseListener {
         if (turn == 1){
             player2Info.setBorder(null);
             player1Info.setBorder(compoundBorder1);
-            turnDisplayed.setText("Current turn: " + name1);
+            turnDisplayed.setText(name1.toUpperCase() + "'s turn");
         }
         else {
             player1Info.setBorder(null);
             player2Info.setBorder(compoundBorder2);
-            turnDisplayed.setText("Current turn: " + name2);
+            turnDisplayed.setText(name2.toUpperCase() + "'s turn");
         }
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
