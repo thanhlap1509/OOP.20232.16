@@ -1,22 +1,23 @@
 package sourcecode.Frame;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
-public class MyPanel extends JPanel {
+public class MyPanel extends JPanel{
     private String orientation;
-
     static final int SIZE = 200;
     static final int MARGIN = 7;
     private int i;
     final Color COLOR = Color.black;
     private String UoL;
-
+    private JLabel gemsIndicator;
     private boolean showArrow;
+    private boolean initiateText = false;
     public int arrowWidth;
     MyPanel(String ori){
         showArrow = false;
-        this.setLayout(new BorderLayout());
+        this.setLayout(null);
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
@@ -24,7 +25,7 @@ public class MyPanel extends JPanel {
     }
     MyPanel(String ori, String uol, int i){
         showArrow = false;
-        setBackground(COLOR);
+        this.setLayout(null);
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
@@ -33,24 +34,27 @@ public class MyPanel extends JPanel {
         this.setVisible(true);
     }
     @Override
-    public void paint(Graphics g){
-        super.paint(g);
+    public void paintComponent(Graphics g){
+        super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(2));
         switch (orientation) {
             case "left" -> {
+                setGemsIndicator();
                 this.i = 11;
                 g2D.setPaint(Color.white);
                 g2D.fillArc(MARGIN / 2, MARGIN, SIZE, (int) (SIZE * 1.2), 90, 180);
                 g2D.setBackground(getBackground());
             }
             case "right" -> {
+                setGemsIndicator();
                 this.i = 5;
                 g2D.setPaint(Color.white);
                 g2D.fillArc(-SIZE / 2 + MARGIN / 2, MARGIN, SIZE, (int) (SIZE * 1.2), 270, 180);
                 g2D.setBackground(getBackground());
             }
             case "center" -> {
+                setGemsIndicator();
                 if (UoL.equals("upper")) {
                     g2D.setPaint(Color.white);
                     g2D.fillRect(MARGIN, MARGIN, (getWidth() - MARGIN * 2), (int) (SIZE * 0.55) + MARGIN / 2);
@@ -75,6 +79,19 @@ public class MyPanel extends JPanel {
                     g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 3, (int)(height * 3 / 4));
                 }
             }
+        }
+    }
+    private void setGemsIndicator(){
+        gemsIndicator = new JLabel();
+        gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
+        gemsIndicator.setText("5");
+        if (orientation.equals("left")){
+            gemsIndicator.setBounds(getWidth() - 20, 5, 20, 20);
+        }
+        else gemsIndicator.setBounds(10, 5, 20, 20);
+        if (!initiateText) {
+            this.add(gemsIndicator);
+            initiateText = true;
         }
     }
     public int getI() {

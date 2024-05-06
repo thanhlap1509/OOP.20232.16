@@ -77,11 +77,13 @@ public class GameFrame extends JFrame implements MouseListener {
         //initiate timer label
         turn = 1;
         timerLabel = new JLabel();
+        timerLabel.setFont(new Font("Arial", Font.BOLD, 18));
+        timerLabel.setBorder(new EmptyBorder(5, 5 , 0, 0));
         timerLabel.setForeground(TEXT_COLOR);
         timerLabel.setHorizontalAlignment(SwingConstants.LEFT);
         timerLabel.setVerticalAlignment(SwingConstants.TOP);
         timerLabel.setHorizontalTextPosition(JLabel.LEFT);
-        timerLabel.setBounds(0, 0, 100, 50);
+        timerLabel.setBounds(0, 0, 150, 50);
         timerCountDown();
         //players container
         JPanel player2Container = new JPanel();
