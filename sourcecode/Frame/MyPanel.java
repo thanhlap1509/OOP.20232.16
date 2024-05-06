@@ -76,10 +76,6 @@ public class MyPanel extends JPanel {
                 }
             }
         }
-        ImageIcon gem1 = new ImageIcon("sourcecode/Frame/small_rock.png");
-        ImageIcon gem2 = new ImageIcon("sourcecode/Frame/small_rock.png");
-        g.drawImage(gem1.getImage(), getWidth() / 2, getHeight() / 2, this);
-        g.drawImage(gem2.getImage(), getWidth() / 2 + 5, getHeight() / 2 + 5, this);
     }
     public int getI() {
         return i;
