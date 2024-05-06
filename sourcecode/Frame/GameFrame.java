@@ -106,10 +106,10 @@ public class GameFrame extends JFrame implements MouseListener {
         //Board game
         JPanel boardGameContainer = new JPanel();
             //left tiles
-        MyPanel leftTile = new MyPanel("left");
+        MyPanel leftTile = new MyPanel("left", 0, 1);
         leftTile.addMouseListener(this);
             //right tiles
-        MyPanel rightTile = new MyPanel("right");
+        MyPanel rightTile = new MyPanel("right", 0, 1);
         rightTile.addMouseListener(this);
             //center tiles
         JPanel centerTiles = new JPanel();
@@ -119,7 +119,7 @@ public class GameFrame extends JFrame implements MouseListener {
         upper.setLayout(new GridLayout(1, 5));
         upperTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
-            upperTiles[i] = new MyPanel("center", "upper", 10 - i);
+            upperTiles[i] = new MyPanel("center", "upper", 10 - i, 5, 0);
             upperTiles[i].addMouseListener(this);
             upper.add(upperTiles[i]);
         }
@@ -128,7 +128,7 @@ public class GameFrame extends JFrame implements MouseListener {
         lower.setLayout(new GridLayout(1, 5));
         lowerTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
-            lowerTiles[i] = new MyPanel("center", "lower", i);
+            lowerTiles[i] = new MyPanel("center", "lower", i, 5, 0);
             lowerTiles[i].addMouseListener(this);
             lower.add(lowerTiles[i]);
         }

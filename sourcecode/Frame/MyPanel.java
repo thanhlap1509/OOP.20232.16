@@ -15,15 +15,20 @@ public class MyPanel extends JPanel{
     private boolean showArrow;
     private boolean initiateText = false;
     public int arrowWidth;
-    MyPanel(String ori){
+    private int dan;
+    private int quan;
+
+    MyPanel(String ori, int dan, int quan){
         showArrow = false;
         this.setLayout(null);
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
+        this.dan = dan;
+        this.quan = quan;
         this.setVisible(true);
     }
-    MyPanel(String ori, String uol, int i){
+    MyPanel(String ori, String uol, int i, int dan, int quan){
         showArrow = false;
         this.setLayout(null);
         setBackground(COLOR);
@@ -31,6 +36,8 @@ public class MyPanel extends JPanel{
         this.orientation = ori;
         this.UoL = uol;
         this.i = i;
+        this.dan = dan;
+        this.quan = quan;
         this.setVisible(true);
     }
     @Override
@@ -84,7 +91,7 @@ public class MyPanel extends JPanel{
     private void setGemsIndicator(){
         gemsIndicator = new JLabel();
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
-        gemsIndicator.setText("5");
+        gemsIndicator.setText(String.valueOf((dan + quan)));
         if (orientation.equals("left")){
             gemsIndicator.setBounds(getWidth() - 20, 5, 20, 20);
         }
@@ -103,7 +110,21 @@ public class MyPanel extends JPanel{
     public String getUoL() {
         return UoL;
     }
+    public int getDan() {
+        return dan;
+    }
+    public int getQuan() {
+        return quan;
+    }
     public void setArrow(boolean value){
         showArrow = value;
+    }
+
+    public void setDan(int dan) {
+        this.dan = dan;
+    }
+
+    public void setQuan(int quan) {
+        this.quan = quan;
     }
 }
