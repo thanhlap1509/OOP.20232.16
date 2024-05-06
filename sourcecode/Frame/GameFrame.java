@@ -13,6 +13,7 @@ import java.util.Timer;
 
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 825;
+    final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
@@ -21,7 +22,6 @@ public class GameFrame extends JFrame implements MouseListener {
     private final JLabel player1Info;
     private final JLabel player2Info;
     private final JLabel timerLabel;
-    private final JLabel turnDisplayed;
     private final JMenu exitMenu;
     private MyPanel[] upperTiles;
     private MyPanel[] lowerTiles;
@@ -54,7 +54,7 @@ public class GameFrame extends JFrame implements MouseListener {
         ImageIcon player2ImgIcon = new ImageIcon(player2Img);
         //create two border, one for apply padding, one to paint with color and combine into compound border to indicate turn
         Border paddingBorder1 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
-        Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 5, 0, 0);
+        Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
         Border indicatorBorder = BorderFactory.createLineBorder(Color.yellow, 2);
         compoundBorder1 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder1);
         compoundBorder2 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder2);
@@ -65,40 +65,37 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
         player1Info.setVerticalTextPosition(JLabel.CENTER);
+        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.7) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
         //player 2 container
         player2Info = new JLabel();
-        player2Info.setText("<html><div style='text-align:right;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
+        player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
         player2Info.setForeground(TEXT_COLOR);
         player2Info.setIcon(player2ImgIcon);
-        player2Info.setHorizontalTextPosition(JLabel.LEFT);
+        player2Info.setHorizontalTextPosition(JLabel.RIGHT);
         player2Info.setVerticalTextPosition(JLabel.CENTER);
-        //game status container
-        JPanel gameStatus = new JPanel();
-        gameStatus.setLayout(new GridLayout(6, 1));
+        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.7) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
+        //initiate timer label
         turn = 1;
-        turnDisplayed = new JLabel();
-        turnDisplayed.setBorder(new EmptyBorder(5, 5, 5, 5));
-        turnDisplayed.setForeground(TEXT_COLOR);
-        turnDisplayed.setHorizontalAlignment(SwingConstants.CENTER);
-        turnDisplayed.setVerticalAlignment(SwingConstants.TOP);
-
         timerLabel = new JLabel();
-        timerLabel.setBorder(new EmptyBorder(5, 5, 5, 5));
         timerLabel.setForeground(TEXT_COLOR);
-        timerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        timerLabel.setHorizontalAlignment(SwingConstants.LEFT);
         timerLabel.setVerticalAlignment(SwingConstants.TOP);
+        timerLabel.setHorizontalTextPosition(JLabel.LEFT);
+        timerLabel.setBounds(0, 0, 100, 50);
         timerCountDown();
-        gameStatus.add(turnDisplayed);
-        gameStatus.add(timerLabel);
-        gameStatus.setBackground(HEADER_COLOR);
-        //header container
-        JPanel gameInfo = new JPanel();
-        gameInfo.setLayout(new BorderLayout());
-        gameInfo.setBackground(HEADER_COLOR);
-        gameInfo.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
-        gameInfo.add(player1Info,BorderLayout.WEST);
-        gameInfo.add(gameStatus, BorderLayout.CENTER);
-        gameInfo.add(player2Info, BorderLayout.EAST);
+        //players container
+        JPanel player2Container = new JPanel();
+        player2Container.setLayout(null);
+        player2Container.setBackground(HEADER_COLOR);
+        player2Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
+        player2Container.add(timerLabel);
+        player2Container.add(player2Info);
+        // -----
+        JPanel player1Container = new JPanel();
+        player1Container.setLayout(null);
+        player1Container.setBackground(HEADER_COLOR);
+        player1Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
+        player1Container.add(player1Info);
             //menu bar
         JMenuBar menuBar = new JMenuBar();
         exitMenu = new JMenu("Exit");
@@ -146,11 +143,12 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setJMenuBar(menuBar);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize(FRAME_WIDTH, HEADER_SIZE + (int)(MyPanel.SIZE*1.6));
+        this.setSize(FRAME_WIDTH, HEADER_SIZE * 2 + (int)(MyPanel.SIZE*1.6));
         this.setResizable(false);
         this.setLocationRelativeTo(null);
-        this.add(gameInfo, BorderLayout.NORTH);
+        this.add(player2Container, BorderLayout.NORTH);
         this.add(boardGameContainer, BorderLayout.CENTER);
+        this.add(player1Container, BorderLayout.SOUTH);
         this.setVisible(true);
     }
     private void timerCountDown(){
@@ -160,17 +158,16 @@ public class GameFrame extends JFrame implements MouseListener {
         if (turn == 1){
             player2Info.setBorder(null);
             player1Info.setBorder(compoundBorder1);
-            turnDisplayed.setText(name1.toUpperCase() + "'s turn");
         }
         else {
             player1Info.setBorder(null);
             player2Info.setBorder(compoundBorder2);
-            turnDisplayed.setText(name2.toUpperCase() + "'s turn");
         }
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
                 if (secondCountDown >= 0) {
                     String string = String.format("Timer: %02d:%02d", secondCountDown / 60, secondCountDown % 60);
+                    timerLabel.setHorizontalTextPosition(JLabel.LEFT);
                     timerLabel.setText(string);
                     secondCountDown--;
                 } else {
@@ -271,6 +268,6 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
     }
     private void updateText2(){
-        player2Info.setText("<html><div style='text-align:right;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
+        player2Info.setText("<html><div style='text-align:left;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
     }
 }
