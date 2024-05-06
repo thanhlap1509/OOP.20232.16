@@ -12,7 +12,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 public class GameFrame extends JFrame implements MouseListener {
-    final int FRAME_WIDTH = 825;
+    final int FRAME_WIDTH = 950;
     final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
@@ -65,7 +65,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
         player1Info.setVerticalTextPosition(JLabel.CENTER);
-        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.7) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
+        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.85) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
         //player 2 container
         player2Info = new JLabel();
         player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
@@ -73,7 +73,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player2Info.setIcon(player2ImgIcon);
         player2Info.setHorizontalTextPosition(JLabel.RIGHT);
         player2Info.setVerticalTextPosition(JLabel.CENTER);
-        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.7) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
+        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.85) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
         //initiate timer label
         turn = 1;
         timerLabel = new JLabel();
@@ -196,10 +196,14 @@ public class GameFrame extends JFrame implements MouseListener {
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
                 timer.cancel();
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
+                    //dummy feature, increase gem in said tile by 1
+                    ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
                     passingRock();
                 }
-                else if (e.getX() >= ((MyPanel)e.getSource()).arrowWidth * 3){
+                else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
+                    //dummy feature, increase gem in said tile by 1
+                    ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
                     passingRock();
                 }

@@ -1,11 +1,18 @@
 package sourcecode.Frame;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 public class MyPanel extends JPanel{
     private String orientation;
+    final int GEM_SIZE = 8;
+    final int LARGE_GEM_SIZE = 10;
+    final int MAX_GEM_PER_SQUARE = 7;
     static final int SIZE = 200;
     static final int MARGIN = 7;
     private int i;
@@ -17,8 +24,9 @@ public class MyPanel extends JPanel{
     public int arrowWidth;
     private int dan;
     private int quan;
-
     MyPanel(String ori, int dan, int quan){
+        gemsIndicator = new JLabel();
+        //gemsIndicator.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         showArrow = false;
         this.setLayout(null);
         setBackground(COLOR);
@@ -26,9 +34,12 @@ public class MyPanel extends JPanel{
         this.orientation = ori;
         this.dan = dan;
         this.quan = quan;
+        this.add(gemsIndicator);
         this.setVisible(true);
     }
     MyPanel(String ori, String uol, int i, int dan, int quan){
+        gemsIndicator = new JLabel();
+        //gemsIndicator.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         showArrow = false;
         this.setLayout(null);
         setBackground(COLOR);
@@ -38,6 +49,7 @@ public class MyPanel extends JPanel{
         this.i = i;
         this.dan = dan;
         this.quan = quan;
+        this.add(gemsIndicator);
         this.setVisible(true);
     }
     @Override
@@ -74,32 +86,37 @@ public class MyPanel extends JPanel{
                 g2D.setPaint(Color.black);
                 // draw arrow if I let it
                 if (showArrow){
-                    arrowWidth = (int)(getWidth() / 4);
+                    arrowWidth = (int)(getWidth() / 6);
                     int height = getHeight();
                     // draw left arrow
-                    g2D.drawLine(MARGIN / 2, (int)(height / 2), arrowWidth, (int)(height / 4));
-                    g2D.drawLine(MARGIN / 2, (int)(height / 2), arrowWidth, (int)(height * 3 / 4));
+                    g2D.drawLine(MARGIN, (int)(height / 2), arrowWidth, (int)(height / 4));
+                    g2D.drawLine(MARGIN, (int)(height / 2), arrowWidth, (int)(height * 3 / 4));
                     g2D.drawLine(arrowWidth, (int)(height / 4), arrowWidth, (int)(height * 3 / 4));
                     //draw right arrow
-                    g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 4 - MARGIN / 2, (int)(height / 2));
-                    g2D.drawLine(arrowWidth * 3, (int)(height * 3 / 4), arrowWidth * 4 - MARGIN / 2, (int)(height / 2));
-                    g2D.drawLine(arrowWidth * 3, (int)(height / 4), arrowWidth * 3, (int)(height * 3 / 4));
+                    g2D.drawLine( getWidth() - arrowWidth, (int)(height / 4), getWidth() - MARGIN, (int)(height / 2));
+                    g2D.drawLine(getWidth() - arrowWidth, (int)(height * 3 / 4), getWidth() - MARGIN, (int)(height / 2));
+                    g2D.drawLine(getWidth() - arrowWidth, (int)(height / 4), getWidth() - arrowWidth, (int)(height * 3 / 4));
+                }
+                //draw circle indicating number of small gems
+                for (int i = 0; i < dan; i++){
+                    g2D.setPaint(Color.black);
+                    g2D.fillArc((int)(MARGIN*2 + 17 + (i % MAX_GEM_PER_SQUARE)*1.5*GEM_SIZE), (int)(MARGIN + 20 + (i / MAX_GEM_PER_SQUARE - 1)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
+                }
+                //draw circle indicating number of large gems
+                for (int j = 0; j < quan; j++){
+                    g2D.fillArc((int)(MARGIN*1.5 + LARGE_GEM_SIZE - GEM_SIZE + 17 + (j % MAX_GEM_PER_SQUARE)*1.5*LARGE_GEM_SIZE), (int)(MARGIN + 18 + ((60) / MAX_GEM_PER_SQUARE)*LARGE_GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
                 }
             }
         }
     }
     private void setGemsIndicator(){
-        gemsIndicator = new JLabel();
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
         gemsIndicator.setText(String.valueOf((dan + quan)));
         if (orientation.equals("left")){
             gemsIndicator.setBounds(getWidth() - 20, 5, 20, 20);
         }
         else gemsIndicator.setBounds(10, 5, 20, 20);
-        if (!initiateText) {
-            this.add(gemsIndicator);
-            initiateText = true;
-        }
+        repaint();
     }
     public int getI() {
         return i;
