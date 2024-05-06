@@ -36,7 +36,7 @@ public class GameFrame extends JFrame implements MouseListener {
     GameFrame() {
         //getting name for two player and initiate point = 0
         name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
-        name2 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
+        name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.INFORMATION_MESSAGE);
         point1 = 0;
         point2 = 0;
         // try-catch reading png file into image instances then convert to image icon
