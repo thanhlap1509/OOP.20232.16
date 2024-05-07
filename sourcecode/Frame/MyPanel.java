@@ -26,7 +26,6 @@ public class MyPanel extends JPanel{
     private int quan;
     MyPanel(String ori, int dan, int quan){
         gemsIndicator = new JLabel();
-        //gemsIndicator.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         showArrow = false;
         this.setLayout(null);
         setBackground(COLOR);
@@ -39,7 +38,6 @@ public class MyPanel extends JPanel{
     }
     MyPanel(String ori, String uol, int i, int dan, int quan){
         gemsIndicator = new JLabel();
-        //gemsIndicator.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         showArrow = false;
         this.setLayout(null);
         setBackground(COLOR);
@@ -97,17 +95,70 @@ public class MyPanel extends JPanel{
                     g2D.drawLine(getWidth() - arrowWidth, (int)(height * 3 / 4), getWidth() - MARGIN, (int)(height / 2));
                     g2D.drawLine(getWidth() - arrowWidth, (int)(height / 4), getWidth() - arrowWidth, (int)(height * 3 / 4));
                 }
-                //draw circle indicating number of small gems
-                for (int i = 0; i < dan; i++){
-                    g2D.setPaint(Color.black);
-                    g2D.fillArc((int)(MARGIN*2 + 17 + (i % MAX_GEM_PER_SQUARE)*1.5*GEM_SIZE), (int)(MARGIN + 20 + (i / MAX_GEM_PER_SQUARE - 1)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
-                }
-                //draw circle indicating number of large gems
-                for (int j = 0; j < quan; j++){
-                    g2D.fillArc((int)(MARGIN*1.5 + LARGE_GEM_SIZE - GEM_SIZE + 17 + (j % MAX_GEM_PER_SQUARE)*1.5*LARGE_GEM_SIZE), (int)(MARGIN + 18 + ((60) / MAX_GEM_PER_SQUARE)*LARGE_GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
-                }
+
             }
         }
+        drawGems(g2D);
+    }
+    private void drawGems(Graphics2D g2D){
+        g2D.setPaint(Color.black);
+        switch(orientation){
+            case "left" -> {
+                int MAX_GEM_PER_CIRCLE = 6;
+                int surplus = 0;
+                int mark = 0;
+                int RANGE;
+                int reachMax = 0;
+                //draw circle indicating number of small gems
+                for (int j = 0; j < dan; j++){
+                        RANGE = j - mark;
+                        //System.out.println("J is " + j + " surplus is " + surplus + " mark is " + mark);
+                        g2D.fillArc((int)(MARGIN*2.5 + 14 + (RANGE % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE - surplus*1.5*GEM_SIZE), (int)(getHeight() / 4 + MARGIN + 20 + (reachMax == 2 ? MAX_GEM_PER_CIRCLE - surplus : surplus)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
+                        if ((j + 1 - mark) % (MAX_GEM_PER_CIRCLE + surplus) == 0) {
+                            if (reachMax == 0) surplus++;
+                            else if (reachMax == 2){
+                                if (surplus > 0) surplus--;
+                            }
+                            if (surplus == 3) {
+                                if (reachMax == 0) reachMax++;
+                                else if (reachMax == 1) {
+                                    reachMax = 2;
+                                    surplus = 2;
+                                }
+                            }
+                            mark = j + 1;
+                        }
+                }
+                //draw circle indicating number of large gems
+                for (int i = 0; i < quan; i++){
+                    g2D.fillArc((int)(MARGIN*2.5 + 14 + ((dan + i - mark) % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE - surplus*1.5*GEM_SIZE), (int)(getHeight() / 4 +MARGIN + 20 + ((reachMax == 2 ? MAX_GEM_PER_CIRCLE - surplus : surplus) + (dan == 50 && i == 1 ? 1 : 0))*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
+                    if ((dan + i + 1 - mark) % (MAX_GEM_PER_CIRCLE + surplus) == 0) {
+                        if (reachMax == 0) surplus++;
+                        else if (reachMax == 2){
+                            if (surplus > 0) surplus--;
+                        }
+                        if (surplus == 3) {
+                            if (reachMax == 0) reachMax++;
+                            else if (reachMax == 1) {
+                                reachMax = 2;
+                                surplus = 2;
+                            }
+                        }
+                        mark = dan + i + 1;
+                    }
+                }
+            }
+            case "center" -> {
+                //draw circle indicating number of small gems
+                for (int i = 0; i < dan; i++){
+                    g2D.fillArc((int)(MARGIN*2 + 14 + (i % MAX_GEM_PER_SQUARE)*1.5*GEM_SIZE), (int)(MARGIN + 20 + (i / MAX_GEM_PER_SQUARE - 1)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
+                }
+                //draw circle indicating number of large gems
+                for (int i = 0; i < quan; i++){
+                    g2D.fillArc((int)(MARGIN*2 + 14 + ((dan + i) % MAX_GEM_PER_SQUARE)*1.5*GEM_SIZE), (int)(MARGIN + 20 + ((dan + i) / MAX_GEM_PER_SQUARE - 1)*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
+                }
+        }
+    }
     }
     private void setGemsIndicator(){
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));

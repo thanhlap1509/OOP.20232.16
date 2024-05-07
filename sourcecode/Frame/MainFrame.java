@@ -1,10 +1,6 @@
 package sourcecode.Frame;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import java.awt.Color;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -17,11 +13,6 @@ public class MainFrame extends JFrame implements ActionListener{
     JButton helpButton;
     JButton exitButton;
     public MainFrame(){
-        JLabel title = new JLabel("O An Quan");
-        title.setForeground(new Color(57, 255, 20));
-        title.setFont(new Font("MV Boli", Font.PLAIN, 40));
-        title.setBounds(150, 50, 250,  50);
-
         startButton = new JButton("Start");
         startButton.setBounds(200, 200, 100, 30);
         startButton.setFocusable(false);
@@ -36,16 +27,14 @@ public class MainFrame extends JFrame implements ActionListener{
         exitButton.setBounds(200, 300, 100, 30);
         exitButton.setFocusable(false);
         exitButton.addActionListener(this);
-
         this.setTitle("Main Window");
+        this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLayout(null);
-        this.setSize(500, 500);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
         this.getContentPane().setBackground(new Color(0, 0, 0));
-        this.add(title);
         this.add(startButton);
         this.add(helpButton);
         this.add(exitButton);

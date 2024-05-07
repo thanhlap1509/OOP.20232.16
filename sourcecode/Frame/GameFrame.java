@@ -17,8 +17,8 @@ public class GameFrame extends JFrame implements MouseListener {
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
-    private final String name1;
-    private final String name2;
+    private String name1;
+    private String name2;
     private final JLabel player1Info;
     private final JLabel player2Info;
     private final JLabel timerLabel;
@@ -35,8 +35,9 @@ public class GameFrame extends JFrame implements MouseListener {
 
     GameFrame() {
         //getting name for two player and initiate point = 0
-        name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.INFORMATION_MESSAGE);
-        name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.INFORMATION_MESSAGE);
+        while (name1 == null) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
+
+        while (name2 == null) name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.QUESTION_MESSAGE);
         point1 = 0;
         point2 = 0;
         // try-catch reading png file into image instances then convert to image icon
@@ -65,7 +66,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
         player1Info.setVerticalTextPosition(JLabel.CENTER);
-        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.85) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
+        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 2.05) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
         //player 2 container
         player2Info = new JLabel();
         player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
@@ -73,7 +74,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player2Info.setIcon(player2ImgIcon);
         player2Info.setHorizontalTextPosition(JLabel.RIGHT);
         player2Info.setVerticalTextPosition(JLabel.CENTER);
-        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.85) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
+        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 2.05) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
         //initiate timer label
         turn = 1;
         timerLabel = new JLabel();
@@ -97,6 +98,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Container.setLayout(null);
         player1Container.setBackground(HEADER_COLOR);
         player1Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
+        player1Container.setBorder(new EmptyBorder(-5, 0, 0, 0));
         player1Container.add(player1Info);
             //menu bar
         JMenuBar menuBar = new JMenuBar();
@@ -145,8 +147,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setJMenuBar(menuBar);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize(FRAME_WIDTH, HEADER_SIZE * 2 + (int)(MyPanel.SIZE*1.6));
-        this.setResizable(false);
+        this.setSize(FRAME_WIDTH,   HEADER_SIZE * 2 + (int)(MyPanel.SIZE*1.6));
         this.setLocationRelativeTo(null);
         this.add(player2Container, BorderLayout.NORTH);
         this.add(boardGameContainer, BorderLayout.CENTER);
@@ -249,7 +250,7 @@ public class GameFrame extends JFrame implements MouseListener {
         System.out.println("Passing rock");
         for (int i = 0; i < 4; i++){
             try {
-                Thread.sleep(1000); // Sleeping for 0.5 seconds, total 2 seconds
+                Thread.sleep(200); // Sleeping for 0.5 seconds, total 2 seconds
                 System.out.println(".");
             } catch (InterruptedException ex) {
                 ex.printStackTrace();
