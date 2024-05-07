@@ -28,6 +28,7 @@ public class MyPanel extends JPanel{
         gemsIndicator = new JLabel();
         showArrow = false;
         this.setLayout(null);
+        //this.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
@@ -40,6 +41,7 @@ public class MyPanel extends JPanel{
         gemsIndicator = new JLabel();
         showArrow = false;
         this.setLayout(null);
+        //this.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
@@ -60,25 +62,25 @@ public class MyPanel extends JPanel{
                 setGemsIndicator();
                 this.i = 11;
                 g2D.setPaint(Color.white);
-                g2D.fillArc(MARGIN / 2, MARGIN, SIZE, (int) (SIZE * 1.2), 90, 180);
+                g2D.fillArc(MARGIN / 2, MARGIN, getWidth() * 2 - MARGIN, getHeight() - MARGIN*2, 90, 180);
                 g2D.setBackground(getBackground());
             }
             case "right" -> {
                 setGemsIndicator();
                 this.i = 5;
                 g2D.setPaint(Color.white);
-                g2D.fillArc(-SIZE / 2 + MARGIN / 2, MARGIN, SIZE, (int) (SIZE * 1.2), 270, 180);
+                g2D.fillArc(-(SIZE / 2 + (MARGIN / 2) + 1), MARGIN, getWidth() *2 - (int)(MARGIN*1.5), getHeight() - MARGIN*2, 270, 180);
                 g2D.setBackground(getBackground());
             }
             case "center" -> {
                 setGemsIndicator();
                 if (UoL.equals("upper")) {
                     g2D.setPaint(Color.white);
-                    g2D.fillRect(MARGIN, MARGIN, (getWidth() - MARGIN * 2), (int) (SIZE * 0.55) + MARGIN / 2);
+                    g2D.fillRect(MARGIN/2, MARGIN, (getWidth() - MARGIN), (int) (getHeight() * 0.9) + MARGIN / 2);
                     g2D.setBackground(getBackground());
                 } else if (UoL.equals("lower")) {
                     g2D.setPaint(Color.white);
-                    g2D.fillRect(MARGIN, MARGIN / 2, (getWidth() - MARGIN * 2), (int) (SIZE * 0.55) + MARGIN / 2);
+                    g2D.fillRect(MARGIN/2, MARGIN / 2, (getWidth() - MARGIN), (int) (getHeight() * 0.9) + MARGIN / 2);
                     g2D.setBackground(getBackground());
                 }
                 g2D.setPaint(Color.black);
@@ -112,14 +114,13 @@ public class MyPanel extends JPanel{
                 //draw circle indicating number of small gems
                 for (int j = 0; j < dan; j++){
                         RANGE = j - mark;
-                        //System.out.println("J is " + j + " surplus is " + surplus + " mark is " + mark);
-                        g2D.fillArc((int)(MARGIN*2.5 + 14 + (RANGE % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE - surplus*1.5*GEM_SIZE), (int)(getHeight() / 4 + MARGIN + 20 + (reachMax == 2 ? MAX_GEM_PER_CIRCLE - surplus : surplus)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
+                        g2D.fillArc((int)(MARGIN*2.5 + 14 + (RANGE % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE - surplus*1.5*GEM_SIZE), (int)(getHeight() / 4 + MARGIN + 20 + (reachMax == 2 ? MAX_GEM_PER_CIRCLE - 1 - surplus : surplus)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
                         if ((j + 1 - mark) % (MAX_GEM_PER_CIRCLE + surplus) == 0) {
                             if (reachMax == 0) surplus++;
                             else if (reachMax == 2){
                                 if (surplus > 0) surplus--;
                             }
-                            if (surplus == 3) {
+                            if (surplus == 2) {
                                 if (reachMax == 0) reachMax++;
                                 else if (reachMax == 1) {
                                     reachMax = 2;
@@ -131,13 +132,13 @@ public class MyPanel extends JPanel{
                 }
                 //draw circle indicating number of large gems
                 for (int i = 0; i < quan; i++){
-                    g2D.fillArc((int)(MARGIN*2.5 + 14 + ((dan + i - mark) % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE - surplus*1.5*GEM_SIZE), (int)(getHeight() / 4 +MARGIN + 20 + ((reachMax == 2 ? MAX_GEM_PER_CIRCLE - surplus : surplus) + (dan == 50 && i == 1 ? 1 : 0))*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
+                    g2D.fillArc((int)(MARGIN*2.5 + 14 + ((dan + i - mark) % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE - surplus*1.5*GEM_SIZE), (int)(getHeight() / 4 +MARGIN + 20 + ((reachMax == 2 ? MAX_GEM_PER_CIRCLE - 1 - surplus : surplus) + (dan == 50 && i == 1 ? 1 : 0))*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
                     if ((dan + i + 1 - mark) % (MAX_GEM_PER_CIRCLE + surplus) == 0) {
                         if (reachMax == 0) surplus++;
                         else if (reachMax == 2){
                             if (surplus > 0) surplus--;
                         }
-                        if (surplus == 3) {
+                        if (surplus == 2) {
                             if (reachMax == 0) reachMax++;
                             else if (reachMax == 1) {
                                 reachMax = 2;
@@ -158,13 +159,13 @@ public class MyPanel extends JPanel{
                 for (int j = 0; j < dan; j++){
                     RANGE = j - mark;
                     //System.out.println("J is " + j + " surplus is " + surplus + " mark is " + mark);
-                    g2D.fillArc((int)(MARGIN + (RANGE % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE), (int)(getHeight() / 4 + MARGIN + 20 + (reachMax == 2 ? MAX_GEM_PER_CIRCLE - surplus : surplus)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
+                    g2D.fillArc((int)(MARGIN + (RANGE % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE), (int)(getHeight() / 4 + MARGIN + 20 + (reachMax == 2 ? MAX_GEM_PER_CIRCLE -1- surplus : surplus)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
                     if ((j + 1 - mark) % (MAX_GEM_PER_CIRCLE + surplus) == 0) {
                         if (reachMax == 0) surplus++;
                         else if (reachMax == 2){
                             if (surplus > 0) surplus--;
                         }
-                        if (surplus == 3) {
+                        if (surplus == 2) {
                             if (reachMax == 0) reachMax++;
                             else if (reachMax == 1) {
                                 reachMax = 2;
@@ -176,13 +177,13 @@ public class MyPanel extends JPanel{
                 }
                 //draw circle indicating number of large gems
                 for (int i = 0; i < quan; i++){
-                    g2D.fillArc((int)(MARGIN + ((dan + i - mark) % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE), (int)(getHeight() / 4 +MARGIN + 20 + ((reachMax == 2 ? MAX_GEM_PER_CIRCLE - surplus : surplus) + (dan == 50 && i == 1 ? 1 : 0))*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
+                    g2D.fillArc((int)(MARGIN + ((dan + i - mark) % (MAX_GEM_PER_CIRCLE + surplus))*1.5*GEM_SIZE), (int)(getHeight() / 4 +MARGIN + 20 + ((reachMax == 2 ? MAX_GEM_PER_CIRCLE - 1 - surplus : surplus) + (dan == 50 && i == 1 ? 1 : 0))*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
                     if ((dan + i + 1 - mark) % (MAX_GEM_PER_CIRCLE + surplus) == 0) {
                         if (reachMax == 0) surplus++;
                         else if (reachMax == 2){
                             if (surplus > 0) surplus--;
                         }
-                        if (surplus == 3) {
+                        if (surplus == 2) {
                             if (reachMax == 0) reachMax++;
                             else if (reachMax == 1) {
                                 reachMax = 2;
@@ -210,6 +211,9 @@ public class MyPanel extends JPanel{
         gemsIndicator.setText(String.valueOf((dan + quan)));
         if (orientation.equals("left")){
             gemsIndicator.setBounds(getWidth() - 20, 5, 20, 20);
+        }
+        else if (orientation.equals("right")){
+            gemsIndicator.setBounds(5, 5, 20, 20);
         }
         else gemsIndicator.setBounds(10, 5, 20, 20);
         repaint();

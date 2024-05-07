@@ -12,7 +12,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 public class GameFrame extends JFrame implements MouseListener {
-    final int FRAME_WIDTH = 950;
+    final int FRAME_WIDTH = 899;
     final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
@@ -66,7 +66,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
         player1Info.setVerticalTextPosition(JLabel.CENTER);
-        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 2.05) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
+        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.9) + PLAYER_INFO_WIDTH - HEADER_SIZE - 13, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
         //player 2 container
         player2Info = new JLabel();
         player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
@@ -74,7 +74,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player2Info.setIcon(player2ImgIcon);
         player2Info.setHorizontalTextPosition(JLabel.RIGHT);
         player2Info.setVerticalTextPosition(JLabel.CENTER);
-        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 2.05) + PLAYER_INFO_WIDTH - HEADER_SIZE - 10,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
+        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.9) + PLAYER_INFO_WIDTH - HEADER_SIZE - 13,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
         //initiate timer label
         turn = 1;
         timerLabel = new JLabel();
@@ -147,8 +147,9 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setJMenuBar(menuBar);
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize(FRAME_WIDTH,   HEADER_SIZE * 2 + (int)(MyPanel.SIZE*1.6));
+        this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6));
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.add(player2Container, BorderLayout.NORTH);
         this.add(boardGameContainer, BorderLayout.CENTER);
         this.add(player1Container, BorderLayout.SOUTH);
@@ -210,7 +211,10 @@ public class GameFrame extends JFrame implements MouseListener {
                 }
                 timerCountDown();
             }
-
+        }
+        else if (e.getSource() instanceof MyPanel && (((MyPanel) e.getSource()).getOrientation().equals("left") || ((MyPanel) e.getSource()).getOrientation().equals("right"))){
+            //dummy feature, increase gem in said tile by 1
+            ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
         }
     }
 
