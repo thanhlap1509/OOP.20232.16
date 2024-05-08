@@ -198,16 +198,18 @@ public class GameFrame extends JFrame implements MouseListener {
                 //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
                     //dummy feature, increase gem in said tile by 1 and paint left arrow
-                    ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
-                    System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
-                    passingRock();
+                    //((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
+                    int index = ((MyPanel) e.getSource()).getI();
+                    System.out.println("Go left in tile " + index);
+                    passingRock(index, "left");
                 }
                 //if player click in right arrow
                 else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
                     //dummy feature, increase gem in said tile by 1 and paint right arrow
-                    ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
-                    System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
-                    passingRock();
+                    //((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
+                    int index = ((MyPanel) e.getSource()).getI();
+                    System.out.println("Go right in tile " + index);
+                    passingRock(index, "right");
                 }
                 timerCountDown();
             }
@@ -259,9 +261,9 @@ public class GameFrame extends JFrame implements MouseListener {
                 ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
             }
     }
-    public void passingRock(){
+    public void passingRock(int index, String direction){
         //dummy method, will change later
-        this.setEnabled(false);
+        enableAction(false);
         System.out.println("Passing rock");
         for (int i = 0; i < 4; i++){
             try {
@@ -272,24 +274,30 @@ public class GameFrame extends JFrame implements MouseListener {
             }
         }
         System.out.println("Done");
-        this.setEnabled(true);
-        if (turn == 1) {
-            //update point 1, for now I will leave it to update by 1 for demonstration’s sake
-            point1 += 1;
-            updateText1();
-            turn = 2;
-        }
-        else {
-            //update point 2, for now I will leave it to update by 1 for demonstration’s sake
-            point2 += 1;
-            updateText2();
-            turn = 1;
-        }
+        enableAction(true);
     }
     private void updateText1() {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
     }
     private void updateText2(){
         player2Info.setText("<html><div style='text-align:left;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
+    }
+    private void enableAction(boolean b){
+        if (!b) this.setEnabled(false);
+        else{
+            this.setEnabled(true);
+            if (turn == 1) {
+                //update point 1, for now I will leave it to update by 1 for demonstration’s sake
+                point1 += 1;
+                updateText1();
+                turn = 2;
+            }
+            else {
+                //update point 2, for now I will leave it to update by 1 for demonstration’s sake
+                point2 += 1;
+                updateText2();
+                turn = 1;
+            }
+        }
     }
 }
