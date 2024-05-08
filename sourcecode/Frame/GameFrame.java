@@ -190,7 +190,7 @@ public class GameFrame extends JFrame implements MouseListener {
             this.dispose();
         }
         //only accept center square
-        else if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+        else if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center") && ((MyPanel) e.getSource()).getDan() > 0){
             // enable lower tiles access for player 1 and upper tiles for player 2
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
@@ -224,7 +224,7 @@ public class GameFrame extends JFrame implements MouseListener {
     public void mousePressed(MouseEvent e) {
         //paint arrow if mouse enter arrow
         //if player click in left arrow
-        if (e.getSource() instanceof MyPanel){
+        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getDan() > 0){
             if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
                 ((MyPanel) e.getSource()).setPaintLeft(true);
             }
@@ -242,7 +242,7 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
+        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center") && ((MyPanel) e.getSource()).getDan() > 0){
             // enable lower tiles access for player 1 and upper tiles for player 2
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
@@ -262,19 +262,32 @@ public class GameFrame extends JFrame implements MouseListener {
             }
     }
     public void passingRock(int index, String direction){
+        if (index == 11 || index == 5) return;
         //dummy method, will change later
-        enableAction(false);
-        System.out.println("Passing rock");
-        for (int i = 0; i < 4; i++){
-            try {
-                Thread.sleep(200); // Sleeping for 0.5 seconds, total 2 seconds
-                System.out.println(".");
-            } catch (InterruptedException ex) {
-                ex.printStackTrace();
+        setEnabled(false);
+        //get gem from tile and clear gem
+        int gemToSpread = tiles[index].getDan();
+        tiles[index].setDan(0);
+        int step = 0;
+        if (index <= 4){
+            if (direction.equals("left")){
+                step = -1;
+            }
+            else if (direction.equals("right")){
+                step = 1;
             }
         }
-        System.out.println("Done");
-        enableAction(true);
+        else if (index <= 10){
+            if (direction.equals("left")){
+                step = 1;
+            }
+            else if (direction.equals("right")){
+                step = -1;
+            }
+        }
+        System.out.println(step);
+        // spread gem
+        setEnabled(true);
     }
     private void updateText1() {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
