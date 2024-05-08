@@ -19,14 +19,13 @@ public class GameFrame extends JFrame implements MouseListener {
     final Color TEXT_COLOR = Color.white;
     private String name1;
     private String name2;
-    private final JLabel player1Info;
-    private final JLabel player2Info;
-    private final JLabel timerLabel;
-    private final JMenu exitMenu;
-    private MyPanel[] upperTiles;
-    private MyPanel[] lowerTiles;
-    private final Border compoundBorder1;
-    private final Border compoundBorder2;
+    private JLabel player1Info;
+    private JLabel player2Info;
+    private JLabel timerLabel;
+    private JMenu exitMenu;
+    private MyPanel tiles[];
+    private Border compoundBorder1;
+    private Border compoundBorder2;
     private int secondCountDown;
     private Timer timer;
     private int turn;
@@ -107,41 +106,40 @@ public class GameFrame extends JFrame implements MouseListener {
         menuBar.add(exitMenu);
         //Board game
         JPanel boardGameContainer = new JPanel();
+        tiles = new MyPanel[12];
             //left tiles
-        MyPanel leftTile = new MyPanel("left", 0, 1);
-        leftTile.addMouseListener(this);
+        tiles[11] = new MyPanel("left",11, 0, 1);
+        tiles[11].addMouseListener(this);
             //right tiles
-        MyPanel rightTile = new MyPanel("right", 0, 1);
-        rightTile.addMouseListener(this);
+        tiles[5] = new MyPanel("right",6, 0, 1);
+        tiles[5].addMouseListener(this);
             //center tiles
         JPanel centerTiles = new JPanel();
         centerTiles.setLayout(new GridLayout(2, 1));
                 //upper row
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
-        upperTiles = new MyPanel[5];
-        for (int i = 0; i < 5; i++){
-            upperTiles[i] = new MyPanel("center", "upper", 10 - i, 5, 0);
-            upperTiles[i].addMouseListener(this);
-            upper.add(upperTiles[i]);
+        for (int i = 10; i > 5; i--){
+            tiles[i] = new MyPanel("center", "upper", i, 5, 0);
+            tiles[i].addMouseListener(this);
+            upper.add(tiles[i]);
         }
                 //lower row
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
-        lowerTiles = new MyPanel[5];
         for (int i = 0; i < 5; i++){
-            lowerTiles[i] = new MyPanel("center", "lower", i, 5, 0);
-            lowerTiles[i].addMouseListener(this);
-            lower.add(lowerTiles[i]);
+            tiles[i] = new MyPanel("center", "lower", i, 5, 0);
+            tiles[i].addMouseListener(this);
+            lower.add(tiles[i]);
         }
                 //add upper and lower row in center tiles
         centerTiles.add(upper);
         centerTiles.add(lower);
         //add all container in one board game container
         boardGameContainer.setLayout(new BorderLayout());
-        boardGameContainer.add(leftTile, BorderLayout.WEST);
+        boardGameContainer.add(tiles[11], BorderLayout.WEST);
         boardGameContainer.add(centerTiles, BorderLayout.CENTER);
-        boardGameContainer.add(rightTile, BorderLayout.EAST);
+        boardGameContainer.add(tiles[5], BorderLayout.EAST);
         //frame
         this.setTitle("Game Frame");
         this.setJMenuBar(menuBar);

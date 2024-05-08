@@ -28,7 +28,7 @@ public class MyPanel extends JPanel{
     public int arrowWidth;
     private int dan;
     private int quan;
-    MyPanel(String ori, int dan, int quan){
+    MyPanel(String ori,int i, int dan, int quan){
         gemsIndicator = new JLabel();
         paintLeft = paintRight = false;
         showArrow = false;
@@ -37,6 +37,7 @@ public class MyPanel extends JPanel{
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
+        this.i = i;
         this.dan = dan;
         this.quan = quan;
         this.add(gemsIndicator);
