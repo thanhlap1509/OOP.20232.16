@@ -12,7 +12,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 
 public class GameFrame extends JFrame implements MouseListener {
-    final int FRAME_WIDTH = 899;
+    final int FRAME_WIDTH = 890;
     final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
     final Color HEADER_COLOR = Color.black;
@@ -197,14 +197,16 @@ public class GameFrame extends JFrame implements MouseListener {
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
                 timer.cancel();
+                //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
-                    //dummy feature, increase gem in said tile by 1
+                    //dummy feature, increase gem in said tile by 1 and paint left arrow
                     ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     System.out.println("Go left in tile " + ((MyPanel) e.getSource()).getI());
                     passingRock();
                 }
+                //if player click in right arrow
                 else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
-                    //dummy feature, increase gem in said tile by 1
+                    //dummy feature, increase gem in said tile by 1 and paint right arrow
                     ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     System.out.println("Go right in tile " + ((MyPanel) e.getSource()).getI());
                     passingRock();
@@ -212,14 +214,25 @@ public class GameFrame extends JFrame implements MouseListener {
                 timerCountDown();
             }
         }
+        //dummy feature, increase gem in outer left and right tile by 1
         else if (e.getSource() instanceof MyPanel && (((MyPanel) e.getSource()).getOrientation().equals("left") || ((MyPanel) e.getSource()).getOrientation().equals("right"))){
-            //dummy feature, increase gem in said tile by 1
             ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
         }
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
+        //paint arrow if mouse enter arrow
+        //if player click in left arrow
+        if (e.getSource() instanceof MyPanel){
+            if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
+                ((MyPanel) e.getSource()).setPaintLeft(true);
+            }
+            //if player click in right arrow
+            else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth) {
+                ((MyPanel) e.getSource()).setPaintRight(true);
+            }
+        }
     }
 
     @Override
@@ -234,7 +247,6 @@ public class GameFrame extends JFrame implements MouseListener {
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
                 ((MyPanel) e.getSource()).setArrow(true);
-                ((JPanel) e.getSource()).repaint();
                 ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
         }
@@ -244,7 +256,8 @@ public class GameFrame extends JFrame implements MouseListener {
     public void mouseExited(MouseEvent e) {
         if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
                 ((MyPanel) e.getSource()).setArrow(false);
-                ((JPanel) e.getSource()).repaint();
+                ((MyPanel) e.getSource()).setPaintLeft(false);
+                ((MyPanel) e.getSource()).setPaintRight(false);
                 ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
             }
     }

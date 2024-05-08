@@ -1,5 +1,7 @@
 package sourcecode.Frame;
 
+import sourcecode.Main;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -19,6 +21,8 @@ public class MyPanel extends JPanel{
     final Color COLOR = Color.black;
     private String UoL;
     private JLabel gemsIndicator;
+    private boolean paintLeft;
+    private boolean paintRight;
     private boolean showArrow;
     private boolean initiateText = false;
     public int arrowWidth;
@@ -26,6 +30,7 @@ public class MyPanel extends JPanel{
     private int quan;
     MyPanel(String ori, int dan, int quan){
         gemsIndicator = new JLabel();
+        paintLeft = paintRight = false;
         showArrow = false;
         this.setLayout(null);
         //this.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
@@ -37,8 +42,10 @@ public class MyPanel extends JPanel{
         this.add(gemsIndicator);
         this.setVisible(true);
     }
+
     MyPanel(String ori, String uol, int i, int dan, int quan){
         gemsIndicator = new JLabel();
+        paintLeft = paintRight = false;
         showArrow = false;
         this.setLayout(null);
         //this.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
@@ -86,18 +93,25 @@ public class MyPanel extends JPanel{
                 g2D.setPaint(Color.black);
                 // draw arrow if I let it
                 if (showArrow){
-                    arrowWidth = (int)(getWidth() / 6);
                     int height = getHeight();
+                    arrowWidth = (int)(getWidth() / 6);
                     // draw left arrow
                     g2D.drawLine(MARGIN, (int)(height / 2), arrowWidth, (int)(height / 4));
                     g2D.drawLine(MARGIN, (int)(height / 2), arrowWidth, (int)(height * 3 / 4));
                     g2D.drawLine(arrowWidth, (int)(height / 4), arrowWidth, (int)(height * 3 / 4));
+                        // paint left arrow
+                    if (paintLeft){
+                        g2D.fillPolygon(new int[]{MARGIN, arrowWidth, arrowWidth}, new int[]{height / 2, height / 4, height *3/4}, 3);
+                    }
                     //draw right arrow
                     g2D.drawLine( getWidth() - arrowWidth, (int)(height / 4), getWidth() - MARGIN, (int)(height / 2));
                     g2D.drawLine(getWidth() - arrowWidth, (int)(height * 3 / 4), getWidth() - MARGIN, (int)(height / 2));
                     g2D.drawLine(getWidth() - arrowWidth, (int)(height / 4), getWidth() - arrowWidth, (int)(height * 3 / 4));
+                        // paint right arrow
+                    if (paintRight){
+                        g2D.fillPolygon(new int[]{getWidth() - MARGIN, getWidth() - arrowWidth, getWidth() - arrowWidth}, new int[]{height / 2, height / 4, height * 3 / 4}, 3);
+                    }
                 }
-
             }
         }
         drawGems(g2D);
@@ -241,7 +255,11 @@ public class MyPanel extends JPanel{
         this.dan = dan;
     }
 
-    public void setQuan(int quan) {
-        this.quan = quan;
+    public void setPaintLeft(boolean paintLeft) {
+        this.paintLeft = paintLeft;
+    }
+
+    public void setPaintRight(boolean paintRight) {
+        this.paintRight = paintRight;
     }
 }
