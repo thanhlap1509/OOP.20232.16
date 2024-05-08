@@ -264,30 +264,34 @@ public class GameFrame extends JFrame implements MouseListener {
     public void passingRock(int index, String direction){
         if (index == 11 || index == 5) return;
         //dummy method, will change later
-        setEnabled(false);
+        enableAction(false);
         //get gem from tile and clear gem
         int gemToSpread = tiles[index].getDan();
         tiles[index].setDan(0);
         int step = 0;
+        //get step from location and direction
         if (index <= 4){
-            if (direction.equals("left")){
-                step = -1;
-            }
-            else if (direction.equals("right")){
-                step = 1;
-            }
+            if (direction.equals("left")) step = -1;
+            else if (direction.equals("right")) step = 1;
         }
         else if (index <= 10){
-            if (direction.equals("left")){
-                step = 1;
-            }
-            else if (direction.equals("right")){
-                step = -1;
-            }
+            if (direction.equals("left")) step = 1;
+            else if (direction.equals("right")) step = -1;
+        }
+        // starting from next tile
+        index += step;
+        //spread gem from next tile
+        while (gemToSpread > 0){
+            if (step == 1 && index == 12) index = 0;
+            else if (step == -1 && index == -1) index = 11;
+            //add one gem to tile, and set index to next tile
+            tiles[index].setDan(tiles[index].getDan() + 1);
+            index += step;
+            gemToSpread--;
         }
         System.out.println(step);
         // spread gem
-        setEnabled(true);
+        enableAction(true);
     }
     private void updateText1() {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
