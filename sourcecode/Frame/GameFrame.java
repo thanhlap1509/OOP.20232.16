@@ -262,10 +262,11 @@ public class GameFrame extends JFrame implements MouseListener {
             }
     }
     public void passingRock(int index, String direction){
+        //skip outer tiles
         if (index == 11 || index == 5) return;
-        //dummy method, will change later
+        //stop user from interact with tile anymore
         enableAction(false);
-        //get gem from tile and clear gem
+        //get gem from tile and clear gem in said tile
         int gemToSpread = tiles[index].getDan();
         tiles[index].setDan(0);
         int step = 0;
@@ -289,8 +290,9 @@ public class GameFrame extends JFrame implements MouseListener {
             index += step;
             gemToSpread--;
         }
+
         System.out.println(step);
-        // spread gem
+        // unlid
         enableAction(true);
     }
     private void updateText1() {
@@ -303,6 +305,7 @@ public class GameFrame extends JFrame implements MouseListener {
         if (!b) this.setEnabled(false);
         else{
             this.setEnabled(true);
+            // change
             if (turn == 1) {
                 //update point 1, for now I will leave it to update by 1 for demonstration’s sake
                 point1 += 1;
