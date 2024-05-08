@@ -15,6 +15,7 @@ public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 890;
     final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
+    final int SECOND_TO_SLEEP = 1000;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
     private String name1;
@@ -28,10 +29,13 @@ public class GameFrame extends JFrame implements MouseListener {
     private Border compoundBorder2;
     private int secondCountDown;
     private Timer timer;
+    private javax.swing.Timer timer1 = null;
     private int turn;
     private int point1;
     private int point2;
-
+    private int gemToSpread = 0;
+    private int index = 0;
+    private int step = 0;
     GameFrame() {
         //getting name for two player and initiate point = 0
         while (name1 == null) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
@@ -201,7 +205,8 @@ public class GameFrame extends JFrame implements MouseListener {
                     //((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     int index = ((MyPanel) e.getSource()).getI();
                     System.out.println("Go left in tile " + index);
-                    passingRock(index, "left");
+                    spreadGems(index, "left");
+                    changeTurn();
                 }
                 //if player click in right arrow
                 else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
@@ -209,9 +214,9 @@ public class GameFrame extends JFrame implements MouseListener {
                     //((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     int index = ((MyPanel) e.getSource()).getI();
                     System.out.println("Go right in tile " + index);
-                    passingRock(index, "right");
+                    spreadGems(index, "right");
+                    changeTurn();
                 }
-                timerCountDown();
             }
         }
         //dummy feature, increase gem in outer left and right tile by 1
@@ -261,15 +266,16 @@ public class GameFrame extends JFrame implements MouseListener {
                 ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
             }
     }
-    public void passingRock(int index, String direction){
+    public void spreadGems(int i, String direction){
+        index = i;
+        step = 0;
         //skip outer tiles
         if (index == 11 || index == 5) return;
         //stop user from interact with tile anymore
         enableAction(false);
         //get gem from tile and clear gem in said tile
-        int gemToSpread = tiles[index].getDan();
+        gemToSpread = tiles[index].getDan();
         tiles[index].setDan(0);
-        int step = 0;
         //get step from location and direction
         if (index <= 4){
             if (direction.equals("left")) step = -1;
@@ -282,18 +288,34 @@ public class GameFrame extends JFrame implements MouseListener {
         // starting from next tile
         index += step;
         //spread gem from next tile
-        while (gemToSpread > 0){
-            if (step == 1 && index == 12) index = 0;
-            else if (step == -1 && index == -1) index = 11;
-            //add one gem to tile, and set index to next tile
-            tiles[index].setDan(tiles[index].getDan() + 1);
-            index += step;
-            gemToSpread--;
-        }
-
-        System.out.println(step);
+         timer1 = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (gemToSpread > 0){
+                    spread1Gem();
+                    gemToSpread--;
+                    System.out.println("At index " + index + " with step " + step + " with " + gemToSpread + " left");
+                    index += step;
+                } else {
+                    timer1.stop();
+                    timerCountDown();
+                }
+            }
+        });
+        timer1.start();
+        // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
+        // after spreading once, check if index is now at outer or not
+        // if not, we check if next tile has gem or not, if yes then spread gem again
         // unlid
         enableAction(true);
+    }
+    public void spread1Gem(){
+        System.out.println("index before " + index);
+        if (step == 1 && index == 12) index = 0;
+        if (step == -1 && index == -1) index = 11;
+        System.out.println("index after " + index);
+        //add one gem to tile, and set index to next tile
+        tiles[index].setDan(tiles[index].getDan() + 1);
     }
     private void updateText1() {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
@@ -305,19 +327,21 @@ public class GameFrame extends JFrame implements MouseListener {
         if (!b) this.setEnabled(false);
         else{
             this.setEnabled(true);
-            // change
-            if (turn == 1) {
-                //update point 1, for now I will leave it to update by 1 for demonstration’s sake
-                point1 += 1;
-                updateText1();
-                turn = 2;
-            }
-            else {
-                //update point 2, for now I will leave it to update by 1 for demonstration’s sake
-                point2 += 1;
-                updateText2();
-                turn = 1;
-            }
+        }
+    }
+    private void changeTurn(){
+        // change turn
+        if (turn == 1) {
+            //update point 1, for now I will leave it to update by 1 for demonstration’s sake
+            point1 += 1;
+            updateText1();
+            turn = 2;
+        }
+        else {
+            //update point 2, for now I will leave it to update by 1 for demonstration’s sake
+            point2 += 1;
+            updateText2();
+            turn = 1;
         }
     }
 }

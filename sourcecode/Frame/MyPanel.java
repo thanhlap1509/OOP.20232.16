@@ -1,14 +1,7 @@
 package sourcecode.Frame;
 
-import sourcecode.Main;
-
-import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 public class MyPanel extends JPanel{
     private String orientation;
@@ -24,7 +17,6 @@ public class MyPanel extends JPanel{
     private boolean paintLeft;
     private boolean paintRight;
     private boolean showArrow;
-    private boolean initiateText = false;
     public int arrowWidth;
     private int dan;
     private int quan;
@@ -248,12 +240,11 @@ public class MyPanel extends JPanel{
     public int getQuan() {
         return quan;
     }
+    public void setDan(int passDan) {
+        dan = passDan;
+    }
     public void setArrow(boolean value){
         showArrow = value;
-    }
-
-    public void setDan(int dan) {
-        this.dan = dan;
     }
 
     public void setPaintLeft(boolean paintLeft) {
