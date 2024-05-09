@@ -222,6 +222,7 @@ public class MyPanel extends JPanel{
     }
     private void setGemsIndicator(){
         if (isPointed == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
+        else gemsIndicator.setForeground(Color.black);
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
         gemsIndicator.setText(String.valueOf((dan + quan)));
         if (orientation.equals("left")){
