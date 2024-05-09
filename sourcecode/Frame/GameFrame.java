@@ -57,6 +57,42 @@ public class GameFrame extends JFrame implements MouseListener {
     private int lastIndex;
     private int stopIndex;
     GameFrame() {
+        //Board game
+        JPanel boardGameContainer = new JPanel();
+        tiles = new MyPanel[12];
+        //left tiles
+        tiles[11] = new MyPanel("left",11, 0, 1);
+        tiles[11].addMouseListener(this);
+        //right tiles
+        tiles[5] = new MyPanel("right",6, 0, 1);
+        tiles[5].addMouseListener(this);
+        //center tiles
+        JPanel centerTiles = new JPanel();
+        centerTiles.setLayout(new GridLayout(2, 1));
+        //upper row
+        JPanel upper = new JPanel();
+        upper.setLayout(new GridLayout(1, 5));
+        for (int i = 10; i > 5; i--){
+            tiles[i] = new MyPanel("center", "upper", i, 5, 0);
+            tiles[i].addMouseListener(this);
+            upper.add(tiles[i]);
+        }
+        //lower row
+        JPanel lower = new JPanel();
+        lower.setLayout(new GridLayout(1, 5));
+        for (int i = 0; i < 5; i++){
+            tiles[i] = new MyPanel("center", "lower", i, 5, 0);
+            tiles[i].addMouseListener(this);
+            lower.add(tiles[i]);
+        }
+        //add upper and lower row in center tiles
+        centerTiles.add(upper);
+        centerTiles.add(lower);
+        //add all container in one board game container
+        boardGameContainer.setLayout(new BorderLayout());
+        boardGameContainer.add(tiles[11], BorderLayout.WEST);
+        boardGameContainer.add(centerTiles, BorderLayout.CENTER);
+        boardGameContainer.add(tiles[5], BorderLayout.EAST);
         //getting name for two player and initiate point = 0
         while (name1 == null|| name1.isEmpty()) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
         name1 = name1.toUpperCase();
@@ -139,42 +175,6 @@ public class GameFrame extends JFrame implements MouseListener {
         exitMenu = new JMenu("Exit");
         exitMenu.addMouseListener(this);
         menuBar.add(exitMenu);
-        //Board game
-        JPanel boardGameContainer = new JPanel();
-        tiles = new MyPanel[12];
-            //left tiles
-        tiles[11] = new MyPanel("left",11, 0, 1);
-        tiles[11].addMouseListener(this);
-            //right tiles
-        tiles[5] = new MyPanel("right",6, 0, 1);
-        tiles[5].addMouseListener(this);
-            //center tiles
-        JPanel centerTiles = new JPanel();
-        centerTiles.setLayout(new GridLayout(2, 1));
-                //upper row
-        JPanel upper = new JPanel();
-        upper.setLayout(new GridLayout(1, 5));
-        for (int i = 10; i > 5; i--){
-            tiles[i] = new MyPanel("center", "upper", i, 5, 0);
-            tiles[i].addMouseListener(this);
-            upper.add(tiles[i]);
-        }
-                //lower row
-        JPanel lower = new JPanel();
-        lower.setLayout(new GridLayout(1, 5));
-        for (int i = 0; i < 5; i++){
-            tiles[i] = new MyPanel("center", "lower", i, 5, 0);
-            tiles[i].addMouseListener(this);
-            lower.add(tiles[i]);
-        }
-                //add upper and lower row in center tiles
-        centerTiles.add(upper);
-        centerTiles.add(lower);
-        //add all container in one board game container
-        boardGameContainer.setLayout(new BorderLayout());
-        boardGameContainer.add(tiles[11], BorderLayout.WEST);
-        boardGameContainer.add(centerTiles, BorderLayout.CENTER);
-        boardGameContainer.add(tiles[5], BorderLayout.EAST);
         //frame
         this.setTitle("Game Frame");
         this.setJMenuBar(menuBar);
@@ -189,6 +189,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setVisible(true);
     }
     private void timerCountDown(){
+        checkEndGame();
         //create timer, changing header display according to turn
         timer = new Timer();
         secondCountDown = 60;
@@ -292,7 +293,6 @@ public class GameFrame extends JFrame implements MouseListener {
         } else {
             addPoint();
             this.setEnabled(true);
-            checkEndGame();
         }
     }
     //stopIndex = stopping mark, lastIndex = tile to repaint, index = jumping point
@@ -349,6 +349,7 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     public void checkEndGame(){
         if (tiles[11].getDan() + tiles[11].getQuan() == 0 && tiles[5].getDan() + tiles[5].getDan() == 0){
+            timer.cancel();
             this.dispose();
             if (point1 > point2) System.out.println("player 1 win");
             else if (point2 > point1) System.out.println("player 2 win");
@@ -357,6 +358,8 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     private void afterTurnAction(){
         changeTurn();
+        checkUpperRow();
+        checkLowerRow();
         timerCountDown();
     }
     private void updateText1() {
@@ -365,10 +368,36 @@ public class GameFrame extends JFrame implements MouseListener {
     private void updateText2(){
         player2Info.setText("<html><div style='text-align:left;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
     }
-    private void enableAction(boolean b){
-        if (!b) this.setEnabled(false);
-        else{
-            this.setEnabled(true);
+    private void checkUpperRow(){
+        int full0 = 1;
+        for (int i = 6; i < 11; i++){
+            if (tiles[i].getDan() != 0) {
+                full0 = 0;
+                break;
+            }
+        }
+        if (full0 == 1){
+            for (int i = 6; i < 11; i++){
+                tiles[i].setDan(tiles[i].getDan() + 1);
+            }
+            point2 -= 5;
+            updateText2();
+        }
+    }
+    private void checkLowerRow(){
+        int full0 = 1;
+        for (int i = 0; i < 5; i++){
+            if (tiles[i].getDan() != 0){
+                full0 = 0;
+                break;
+            }
+        }
+        if (full0 == 1){
+            for (int i = 0; i < 5; i++){
+                tiles[i].setDan(tiles[i].getDan() + 1);
+            }
+            point1 -= 5;
+            updateText1();
         }
     }
     private void changeTurn(){
