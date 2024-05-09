@@ -17,7 +17,7 @@ public class MyPanel extends JPanel{
     static final int MARGIN = 7;
     final Color COLOR = Color.black;
     final Color BACKGROUND_COLOR = Color.white;
-    final Color INDICATING_COLOR = Color.green;
+    final Color INDICATING_COLOR = Color.gray;
     private String UoL;
     private JLabel gemsIndicator;
     private boolean paintLeft;
@@ -116,7 +116,8 @@ public class MyPanel extends JPanel{
         drawGems(g2D);
     }
     private void drawGems(Graphics2D g2D){
-        g2D.setPaint(Color.black);
+        if (isPointed == 0) g2D.setPaint(Color.black);
+        else if (isPointed == 1) g2D.setPaint(BACKGROUND_COLOR);
         switch(orientation){
             case "left" -> {
                 int MAX_GEM_PER_CIRCLE = 6;
@@ -220,6 +221,7 @@ public class MyPanel extends JPanel{
     }
     }
     private void setGemsIndicator(){
+        if (isPointed == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
         gemsIndicator.setText(String.valueOf((dan + quan)));
         if (orientation.equals("left")){
