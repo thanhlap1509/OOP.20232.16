@@ -313,13 +313,15 @@ public class GameFrame extends JFrame implements MouseListener {
                     System.out.println(index);
                     if (tiles[index].getDan() > 0){
                         int dan = tiles[index].getDan();
+                        int quan = tiles[index].getQuan();
                         tiles[index].setDan(0);
+                        tiles[index].setQuan(0);
                         if (turn == 1){
-                            point1 += dan;
+                            point1 += dan + quan*10;
                             updateText1();
                         }
                         else if (turn == 2){
-                            point2 += dan;
+                            point2 += dan + quan*10;
                             updateText2();
                         }
                     }

@@ -252,6 +252,9 @@ public class MyPanel extends JPanel{
     public void setDan(int passDan) {
         dan = passDan;
     }
+    public void setQuan(int passQuan){
+        quan = passQuan;
+    }
     public void setArrow(boolean value){
         showArrow = value;
     }
