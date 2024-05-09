@@ -47,6 +47,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private int secondCountDown;
     private Timer timer;
     private javax.swing.Timer gemTimer = null;
+    private javax.swing.Timer pointTimer = null;
     private int turn;
     private int point1;
     private int point2;
@@ -54,6 +55,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private int index = 0;
     private int step = 0;
     private int lastIndex;
+    private int stopIndex;
     GameFrame() {
         //getting name for two player and initiate point = 0
         while (name1 == null|| name1.isEmpty()) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
@@ -242,7 +244,7 @@ public class GameFrame extends JFrame implements MouseListener {
         lastIndex = index;
         // starting from next tile
         index += step;
-        checkIndex();
+        checkIndexForward();
         //spread gem from next tile
          gemTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
 
@@ -257,7 +259,7 @@ public class GameFrame extends JFrame implements MouseListener {
                      setGem(gemToSpread);
                      lastIndex = index;
                      index += step;
-                     checkIndex();
+                     checkIndexForward();
                  } else {
                      gemTimer.stop();
                      tiles[lastIndex].setIsPointed(0);
@@ -292,23 +294,62 @@ public class GameFrame extends JFrame implements MouseListener {
             }
         } else {
             System.out.println("IM ALL OUT OF GEM");
-            index -= step;
-            if (step == 1 && index == -1) index = 11;
-            if (step == -1 && index == 12) index = 0;
-            lastIndex = index;
             addPoint();
-            changeTurn();
-            timerCountDown();
             this.setEnabled(true);
         }
     }
+    //stopIndex = stopping mark, lastIndex = tile to repaint, index = jumping point
+    // if tile's dan at index = 0, and tile's dan at index + step > 0, eat it
+    // index += step, checkIndexForward, lastIndex = index
+    //
     private void addPoint(){
-
+        final int[] iter = {0};
+        pointTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (iter[0] < 6 && tiles[index].getDan() == 0){
+                    index+= step;
+                    checkIndexForward();
+                    System.out.println(index);
+                    if (tiles[index].getDan() > 0){
+                        int dan = tiles[index].getDan();
+                        tiles[index].setDan(0);
+                        if (turn == 1){
+                            point1 += dan;
+                            updateText1();
+                        }
+                        else if (turn == 2){
+                            point2 += dan;
+                            updateText2();
+                        }
+                    }
+                    else {
+                        pointTimer.stop();
+                        afterTurnAction();
+                    }
+                    index += step;
+                    checkIndexForward();
+                    iter[0]++;
+                }else {
+                    pointTimer.stop();
+                    afterTurnAction();
+                }
+            }
+        });
+        pointTimer.start();
     }
 
-    public void checkIndex(){
+    public void checkIndexForward(){
         if (step == 1 && index == 12) index = 0;
         if (step == -1 && index == -1) index = 11;
+    }
+    public void checkIndexBackward(){
+        if (step == 1 && index == -1) index = 11;
+        if (step == -1 && index == 12) index = 0;
+    }
+    private void afterTurnAction(){
+        changeTurn();
+        timerCountDown();
     }
     private void updateText1() {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
@@ -325,20 +366,17 @@ public class GameFrame extends JFrame implements MouseListener {
     private void changeTurn(){
         // change turn
         if (turn == 1) {
-            //update point 1, for now I will leave it to update by 1 for demonstration’s sake
-            point1 += 1;
             updateText1();
             turn = 2;
         }
         else {
-            //update point 2, for now I will leave it to update by 1 for demonstration’s sake
-            point2 += 1;
             updateText2();
             turn = 1;
         }
     }
     @Override
     public void mouseClicked(MouseEvent e) {
+        System.out.println("PLAYER " + turn + " TURN");
         if (e.getSource() == exitMenu){
             System.out.println("Exit");
             timer.cancel();
