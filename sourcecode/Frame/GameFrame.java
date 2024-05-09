@@ -23,6 +23,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private JLabel player1Info;
     private JLabel player2Info;
     private JLabel timerLabel;
+    private JLabel gemInHand;
     private JMenu exitMenu;
     private MyPanel tiles[];
     private Border compoundBorder1;
@@ -36,11 +37,15 @@ public class GameFrame extends JFrame implements MouseListener {
     private int gemToSpread = 0;
     private int index = 0;
     private int step = 0;
+    private int lastIndex;
     GameFrame() {
         //getting name for two player and initiate point = 0
-        while (name1 == null) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
-
-        while (name2 == null) name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.QUESTION_MESSAGE);
+        while (name1 == null|| name1.isEmpty()) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
+        name1 = name1.toUpperCase();
+        while (name2 == null || name2.isEmpty()) name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.QUESTION_MESSAGE);
+        name2 = name2.toUpperCase();
+        System.out.println(name1);
+        System.out.println(name2);
         point1 = 0;
         point2 = 0;
         // try-catch reading png file into image instances then convert to image icon
@@ -89,6 +94,16 @@ public class GameFrame extends JFrame implements MouseListener {
         timerLabel.setHorizontalTextPosition(JLabel.LEFT);
         timerLabel.setBounds(0, 0, 150, 50);
         timerCountDown();
+        //set up gem indicator
+        gemInHand = new JLabel();
+        gemInHand.setFont(new Font("Arial", Font.BOLD, 18));
+        gemInHand.setBorder(new EmptyBorder(5, 0, 0, 10));
+        gemInHand.setForeground(TEXT_COLOR);
+        gemInHand.setHorizontalAlignment(SwingConstants.RIGHT);
+        gemInHand.setVerticalAlignment(SwingConstants.TOP);
+        gemInHand.setHorizontalTextPosition(JLabel.RIGHT);
+        gemInHand.setBounds(0, 0, FRAME_WIDTH - 15, 50);
+        setGem(0);
         //players container
         JPanel player2Container = new JPanel();
         player2Container.setLayout(null);
@@ -96,12 +111,12 @@ public class GameFrame extends JFrame implements MouseListener {
         player2Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
         player2Container.add(timerLabel);
         player2Container.add(player2Info);
+        player2Container.add(gemInHand);
         // -----
         JPanel player1Container = new JPanel();
         player1Container.setLayout(null);
         player1Container.setBackground(HEADER_COLOR);
         player1Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
-        player1Container.setBorder(new EmptyBorder(-5, 0, 0, 0));
         player1Container.add(player1Info);
             //menu bar
         JMenuBar menuBar = new JMenuBar();
@@ -173,7 +188,6 @@ public class GameFrame extends JFrame implements MouseListener {
             public void run() {
                 if (secondCountDown >= 0) {
                     String string = String.format("Timer: %02d:%02d", secondCountDown / 60, secondCountDown % 60);
-                    timerLabel.setHorizontalTextPosition(JLabel.LEFT);
                     timerLabel.setText(string);
                     secondCountDown--;
                 } else {
@@ -185,7 +199,9 @@ public class GameFrame extends JFrame implements MouseListener {
             }
         }, 0, 1000); // Run the task every second
     }
-
+    private void setGem(int gems){
+        gemInHand.setText("Gem: " + gems);
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == exitMenu){
@@ -201,21 +217,19 @@ public class GameFrame extends JFrame implements MouseListener {
                 timer.cancel();
                 //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
-                    //dummy feature, increase gem in said tile by 1 and paint left arrow
-                    //((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     int index = ((MyPanel) e.getSource()).getI();
                     System.out.println("Go left in tile " + index);
+                    //stop user from interact with tile anymore
+                    this.setEnabled(false);
                     spreadGems(index, "left");
-                    changeTurn();
                 }
                 //if player click in right arrow
                 else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
-                    //dummy feature, increase gem in said tile by 1 and paint right arrow
-                    //((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
                     int index = ((MyPanel) e.getSource()).getI();
                     System.out.println("Go right in tile " + index);
+                    //stop user from interact with tile anymore
+                    this.setEnabled(false);
                     spreadGems(index, "right");
-                    changeTurn();
                 }
             }
         }
@@ -271,10 +285,9 @@ public class GameFrame extends JFrame implements MouseListener {
         step = 0;
         //skip outer tiles
         if (index == 11 || index == 5) return;
-        //stop user from interact with tile anymore
-        enableAction(false);
         //get gem from tile and clear gem in said tile
         gemToSpread = tiles[index].getDan();
+        setGem(gemToSpread);
         tiles[index].setDan(0);
         //get step from location and direction
         if (index <= 4){
@@ -285,37 +298,68 @@ public class GameFrame extends JFrame implements MouseListener {
             if (direction.equals("left")) step = 1;
             else if (direction.equals("right")) step = -1;
         }
+        //create holder for initial starting point and previous point
+        int startIndex = index;
+        lastIndex = index;
         // starting from next tile
         index += step;
+        checkIndex();
         //spread gem from next tile
          timer1 = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (gemToSpread > 0){
-                    spread1Gem();
+                    //add one gem to tile, and set index to next tile
+                    tiles[lastIndex].setIsPointed(0);
+                    tiles[index].setDan(tiles[index].getDan() + 1);
+                    tiles[index].setIsPointed(1);
                     gemToSpread--;
-                    System.out.println("At index " + index + " with step " + step + " with " + gemToSpread + " left");
+                    setGem(gemToSpread);
+                    lastIndex = index;
                     index += step;
+                    checkIndex();
                 } else {
                     timer1.stop();
-                    timerCountDown();
+                    tiles[lastIndex].setIsPointed(0);
+                    recursiveSpreadGems(startIndex, direction);
                 }
             }
         });
         timer1.start();
-        // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
-        // after spreading once, check if index is now at outer or not
-        // if not, we check if next tile has gem or not, if yes then spread gem again
-        // unlid
-        enableAction(true);
     }
-    public void spread1Gem(){
-        System.out.println("index before " + index);
+    public void recursiveSpreadGems(int startIndex, String direction){
+        System.out.println("recursive spreading");
+        // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
+        // we check if the next tile is outer tile or not
+        // if not, we check if next tile has gem or not, if yes then spread gem again
+        if (index != 11 && index != 5 && tiles[index].getDan() > 0) {
+            if (startIndex <= 4) {
+                if (direction.equals("left")) {
+                    if (index <= 4) spreadGems(index, "left");
+                    else if (index <= 10) spreadGems(index, "right");
+                } else if (direction.equals("right")) {
+                    if (index <= 4) spreadGems(index, "right");
+                    else if (index <= 10) spreadGems(index, "left");
+                }
+            } else if (startIndex <= 10) {
+                if (direction.equals("left")) {
+                    if (index <= 4) spreadGems(index, "right");
+                    else if (index <= 10) spreadGems(index, "left");
+                } else if (direction.equals("right")) {
+                    if (index <= 4) spreadGems(index, "left");
+                    else if (index <= 10) spreadGems(index, "right");
+                }
+            }
+        } else {
+            System.out.println("IM ALL OUT OF GEM");
+            changeTurn();
+            timerCountDown();
+            this.setEnabled(true);
+        }
+    }
+    public void checkIndex(){
         if (step == 1 && index == 12) index = 0;
         if (step == -1 && index == -1) index = 11;
-        System.out.println("index after " + index);
-        //add one gem to tile, and set index to next tile
-        tiles[index].setDan(tiles[index].getDan() + 1);
     }
     private void updateText1() {
         player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");

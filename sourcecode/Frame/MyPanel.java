@@ -10,8 +10,9 @@ public class MyPanel extends JPanel{
     final int MAX_GEM_PER_SQUARE = 7;
     static final int SIZE = 200;
     static final int MARGIN = 7;
-    private int i;
     final Color COLOR = Color.black;
+    final Color BACKGROUND_COLOR = Color.white;
+    final Color INDICATING_COLOR = Color.green;
     private String UoL;
     private JLabel gemsIndicator;
     private boolean paintLeft;
@@ -20,6 +21,8 @@ public class MyPanel extends JPanel{
     public int arrowWidth;
     private int dan;
     private int quan;
+    private int i;
+    private int isPointed = 0;
     MyPanel(String ori,int i, int dan, int quan){
         gemsIndicator = new JLabel();
         paintLeft = paintRight = false;
@@ -57,29 +60,27 @@ public class MyPanel extends JPanel{
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(2));
+        if (isPointed == 0) g2D.setPaint(BACKGROUND_COLOR);
+        else if (isPointed ==1) g2D.setPaint(INDICATING_COLOR);
         switch (orientation) {
             case "left" -> {
                 setGemsIndicator();
                 this.i = 11;
-                g2D.setPaint(Color.white);
                 g2D.fillArc(MARGIN / 2, MARGIN, getWidth() * 2 - MARGIN, getHeight() - MARGIN*2, 90, 180);
                 g2D.setBackground(getBackground());
             }
             case "right" -> {
                 setGemsIndicator();
                 this.i = 5;
-                g2D.setPaint(Color.white);
                 g2D.fillArc(-(SIZE / 2 + (MARGIN / 2) + 1), MARGIN, getWidth() *2 - (int)(MARGIN*1.5), getHeight() - MARGIN*2, 270, 180);
                 g2D.setBackground(getBackground());
             }
             case "center" -> {
                 setGemsIndicator();
                 if (UoL.equals("upper")) {
-                    g2D.setPaint(Color.white);
                     g2D.fillRect(MARGIN/2, MARGIN, (getWidth() - MARGIN), (int) (getHeight() * 0.9) + MARGIN / 2);
                     g2D.setBackground(getBackground());
                 } else if (UoL.equals("lower")) {
-                    g2D.setPaint(Color.white);
                     g2D.fillRect(MARGIN/2, MARGIN / 2, (getWidth() - MARGIN), (int) (getHeight() * 0.9) + MARGIN / 2);
                     g2D.setBackground(getBackground());
                 }
@@ -246,12 +247,7 @@ public class MyPanel extends JPanel{
     public void setArrow(boolean value){
         showArrow = value;
     }
-
-    public void setPaintLeft(boolean paintLeft) {
-        this.paintLeft = paintLeft;
-    }
-
-    public void setPaintRight(boolean paintRight) {
-        this.paintRight = paintRight;
-    }
+    public void setIsPointed(int i){isPointed = i;}
+    public void setPaintLeft(boolean paintLeft) {this.paintLeft = paintLeft;}
+    public void setPaintRight(boolean paintRight) {this.paintRight = paintRight;}
 }
