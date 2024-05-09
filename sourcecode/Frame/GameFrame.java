@@ -1,16 +1,32 @@
 package sourcecode.Frame;
-import javax.imageio.ImageIO;
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JMenuBar;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.ImageIcon;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.BorderFactory;
+import javax.swing.SwingConstants;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.Image;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.BorderLayout;
+import java.awt.Cursor;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.TimerTask;
 import java.util.Timer;
-
+import javax.imageio.ImageIO;
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 890;
     final int PLAYER_INFO_WIDTH = 175;
@@ -25,7 +41,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private JLabel timerLabel;
     private JLabel gemInHand;
     private JMenu exitMenu;
-    private MyPanel tiles[];
+    private MyPanel[] tiles;
     private Border compoundBorder1;
     private Border compoundBorder2;
     private int secondCountDown;
@@ -202,6 +218,116 @@ public class GameFrame extends JFrame implements MouseListener {
     private void setGem(int gems){
         gemInHand.setText("Gem: " + gems);
     }
+
+    public void spreadGems(int i, String direction){
+        index = i;
+        step = 0;
+        //skip outer tiles
+        if (index == 11 || index == 5) return;
+        //get gem from tile and clear gem in said tile
+        gemToSpread = tiles[index].getDan();
+        setGem(gemToSpread);
+        tiles[index].setDan(0);
+        //get step from location and direction
+        if (index <= 4){
+            if (direction.equals("left")) step = -1;
+            else if (direction.equals("right")) step = 1;
+        }
+        else if (index <= 10){
+            if (direction.equals("left")) step = 1;
+            else if (direction.equals("right")) step = -1;
+        }
+        //create holder for initial starting point and previous point
+        int startIndex = index;
+        lastIndex = index;
+        // starting from next tile
+        index += step;
+        checkIndex();
+        //spread gem from next tile
+         timer1 = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
+
+             @Override
+             public void actionPerformed(ActionEvent e) {
+                 if (gemToSpread > 0){
+                     //add one gem to tile, and set index to next tile
+                     tiles[lastIndex].setIsPointed(0);
+                     tiles[index].setDan(tiles[index].getDan() + 1);
+                     tiles[index].setIsPointed(1);
+                     gemToSpread--;
+                     setGem(gemToSpread);
+                     lastIndex = index;
+                     index += step;
+                     checkIndex();
+                 } else {
+                     timer1.stop();
+                     tiles[lastIndex].setIsPointed(0);
+                     recursiveSpreadGems(startIndex, direction);
+                 }
+             }
+         });
+        timer1.start();
+    }
+    public void recursiveSpreadGems(int startIndex, String direction){
+        System.out.println("recursive spreading");
+        // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
+        // we check if the next tile is outer tile or not
+        // if not, we check if next tile has gem or not, if yes then spread gem again
+        if (index != 11 && index != 5 && tiles[index].getDan() > 0) {
+            if (startIndex <= 4) {
+                if (direction.equals("left")) {
+                    if (index <= 4) spreadGems(index, "left");
+                    else if (index <= 10) spreadGems(index, "right");
+                } else if (direction.equals("right")) {
+                    if (index <= 4) spreadGems(index, "right");
+                    else if (index <= 10) spreadGems(index, "left");
+                }
+            } else if (startIndex <= 10) {
+                if (direction.equals("left")) {
+                    if (index <= 4) spreadGems(index, "right");
+                    else if (index <= 10) spreadGems(index, "left");
+                } else if (direction.equals("right")) {
+                    if (index <= 4) spreadGems(index, "left");
+                    else if (index <= 10) spreadGems(index, "right");
+                }
+            }
+        } else {
+            System.out.println("IM ALL OUT OF GEM");
+            changeTurn();
+            timerCountDown();
+            this.setEnabled(true);
+        }
+    }
+    public void checkIndex(){
+        if (step == 1 && index == 12) index = 0;
+        if (step == -1 && index == -1) index = 11;
+    }
+    private void updateText1() {
+        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
+    }
+    private void updateText2(){
+        player2Info.setText("<html><div style='text-align:left;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
+    }
+    private void enableAction(boolean b){
+        if (!b) this.setEnabled(false);
+        else{
+            this.setEnabled(true);
+        }
+    }
+    private void changeTurn(){
+        // change turn
+        if (turn == 1) {
+            //update point 1, for now I will leave it to update by 1 for demonstration’s sake
+            point1 += 1;
+            updateText1();
+            turn = 2;
+        }
+        else {
+            //update point 2, for now I will leave it to update by 1 for demonstration’s sake
+            point2 += 1;
+            updateText2();
+            turn = 1;
+        }
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == exitMenu){
@@ -270,122 +396,13 @@ public class GameFrame extends JFrame implements MouseListener {
             }
         }
     }
-
     @Override
     public void mouseExited(MouseEvent e) {
         if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
-                ((MyPanel) e.getSource()).setArrow(false);
-                ((MyPanel) e.getSource()).setPaintLeft(false);
-                ((MyPanel) e.getSource()).setPaintRight(false);
-                ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
-            }
-    }
-    public void spreadGems(int i, String direction){
-        index = i;
-        step = 0;
-        //skip outer tiles
-        if (index == 11 || index == 5) return;
-        //get gem from tile and clear gem in said tile
-        gemToSpread = tiles[index].getDan();
-        setGem(gemToSpread);
-        tiles[index].setDan(0);
-        //get step from location and direction
-        if (index <= 4){
-            if (direction.equals("left")) step = -1;
-            else if (direction.equals("right")) step = 1;
-        }
-        else if (index <= 10){
-            if (direction.equals("left")) step = 1;
-            else if (direction.equals("right")) step = -1;
-        }
-        //create holder for initial starting point and previous point
-        int startIndex = index;
-        lastIndex = index;
-        // starting from next tile
-        index += step;
-        checkIndex();
-        //spread gem from next tile
-         timer1 = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (gemToSpread > 0){
-                    //add one gem to tile, and set index to next tile
-                    tiles[lastIndex].setIsPointed(0);
-                    tiles[index].setDan(tiles[index].getDan() + 1);
-                    tiles[index].setIsPointed(1);
-                    gemToSpread--;
-                    setGem(gemToSpread);
-                    lastIndex = index;
-                    index += step;
-                    checkIndex();
-                } else {
-                    timer1.stop();
-                    tiles[lastIndex].setIsPointed(0);
-                    recursiveSpreadGems(startIndex, direction);
-                }
-            }
-        });
-        timer1.start();
-    }
-    public void recursiveSpreadGems(int startIndex, String direction){
-        System.out.println("recursive spreading");
-        // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
-        // we check if the next tile is outer tile or not
-        // if not, we check if next tile has gem or not, if yes then spread gem again
-        if (index != 11 && index != 5 && tiles[index].getDan() > 0) {
-            if (startIndex <= 4) {
-                if (direction.equals("left")) {
-                    if (index <= 4) spreadGems(index, "left");
-                    else if (index <= 10) spreadGems(index, "right");
-                } else if (direction.equals("right")) {
-                    if (index <= 4) spreadGems(index, "right");
-                    else if (index <= 10) spreadGems(index, "left");
-                }
-            } else if (startIndex <= 10) {
-                if (direction.equals("left")) {
-                    if (index <= 4) spreadGems(index, "right");
-                    else if (index <= 10) spreadGems(index, "left");
-                } else if (direction.equals("right")) {
-                    if (index <= 4) spreadGems(index, "left");
-                    else if (index <= 10) spreadGems(index, "right");
-                }
-            }
-        } else {
-            System.out.println("IM ALL OUT OF GEM");
-            changeTurn();
-            timerCountDown();
-            this.setEnabled(true);
-        }
-    }
-    public void checkIndex(){
-        if (step == 1 && index == 12) index = 0;
-        if (step == -1 && index == -1) index = 11;
-    }
-    private void updateText1() {
-        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
-    }
-    private void updateText2(){
-        player2Info.setText("<html><div style='text-align:left;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
-    }
-    private void enableAction(boolean b){
-        if (!b) this.setEnabled(false);
-        else{
-            this.setEnabled(true);
-        }
-    }
-    private void changeTurn(){
-        // change turn
-        if (turn == 1) {
-            //update point 1, for now I will leave it to update by 1 for demonstration’s sake
-            point1 += 1;
-            updateText1();
-            turn = 2;
-        }
-        else {
-            //update point 2, for now I will leave it to update by 1 for demonstration’s sake
-            point2 += 1;
-            updateText2();
-            turn = 1;
+            ((MyPanel) e.getSource()).setArrow(false);
+            ((MyPanel) e.getSource()).setPaintLeft(false);
+            ((MyPanel) e.getSource()).setPaintRight(false);
+            ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
         }
     }
 }

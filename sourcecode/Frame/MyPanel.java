@@ -1,8 +1,13 @@
 package sourcecode.Frame;
 
-import javax.swing.*;
-import java.awt.*;
-
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
+import java.awt.Font;
 public class MyPanel extends JPanel{
     private String orientation;
     final int GEM_SIZE = 8;
