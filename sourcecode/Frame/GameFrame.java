@@ -440,10 +440,6 @@ public class GameFrame extends JFrame implements MouseListener {
                 }
             }
         }
-        //dummy feature, increase gem in outer left and right tile by 1
-        else if (e.getSource() instanceof MyPanel && (((MyPanel) e.getSource()).getOrientation().equals("left") || ((MyPanel) e.getSource()).getOrientation().equals("right"))){
-            ((MyPanel) e.getSource()).setDan(((MyPanel) e.getSource()).getDan() + 1);
-        }
     }
 
     @Override
