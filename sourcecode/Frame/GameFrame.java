@@ -46,7 +46,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private Border compoundBorder2;
     private int secondCountDown;
     private Timer timer;
-    private javax.swing.Timer timer1 = null;
+    private javax.swing.Timer gemTimer = null;
     private int turn;
     private int point1;
     private int point2;
@@ -244,7 +244,7 @@ public class GameFrame extends JFrame implements MouseListener {
         index += step;
         checkIndex();
         //spread gem from next tile
-         timer1 = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
+         gemTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
 
              @Override
              public void actionPerformed(ActionEvent e) {
@@ -259,13 +259,13 @@ public class GameFrame extends JFrame implements MouseListener {
                      index += step;
                      checkIndex();
                  } else {
-                     timer1.stop();
+                     gemTimer.stop();
                      tiles[lastIndex].setIsPointed(0);
                      recursiveSpreadGems(startIndex, direction);
                  }
              }
          });
-        timer1.start();
+        gemTimer.start();
     }
     public void recursiveSpreadGems(int startIndex, String direction){
         System.out.println("recursive spreading");
@@ -292,11 +292,20 @@ public class GameFrame extends JFrame implements MouseListener {
             }
         } else {
             System.out.println("IM ALL OUT OF GEM");
+            index -= step;
+            if (step == 1 && index == -1) index = 11;
+            if (step == -1 && index == 12) index = 0;
+            lastIndex = index;
+            addPoint();
             changeTurn();
             timerCountDown();
             this.setEnabled(true);
         }
     }
+    private void addPoint(){
+
+    }
+
     public void checkIndex(){
         if (step == 1 && index == 12) index = 0;
         if (step == -1 && index == -1) index = 11;
