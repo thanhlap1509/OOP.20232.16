@@ -296,6 +296,7 @@ public class GameFrame extends JFrame implements MouseListener {
             System.out.println("IM ALL OUT OF GEM");
             addPoint();
             this.setEnabled(true);
+            checkEndGame();
         }
     }
     //stopIndex = stopping mark, lastIndex = tile to repaint, index = jumping point
@@ -340,14 +341,17 @@ public class GameFrame extends JFrame implements MouseListener {
         });
         pointTimer.start();
     }
-
     public void checkIndexForward(){
         if (step == 1 && index == 12) index = 0;
         if (step == -1 && index == -1) index = 11;
     }
-    public void checkIndexBackward(){
-        if (step == 1 && index == -1) index = 11;
-        if (step == -1 && index == 12) index = 0;
+    public void checkEndGame(){
+        if (tiles[11].getDan() + tiles[11].getQuan() == 0 && tiles[5].getDan() + tiles[5].getDan() == 0){
+            this.dispose();
+            if (point1 > point2) System.out.println("player 1 win");
+            else if (point2 > point1) System.out.println("player 2 win");
+            else System.out.println("Tie");
+        }
     }
     private void afterTurnAction(){
         changeTurn();
