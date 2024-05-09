@@ -31,7 +31,7 @@ public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 890;
     final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
-    final int SECOND_TO_SLEEP = 1000;
+    final int SECOND_TO_SLEEP = 500;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
     private String name1;
