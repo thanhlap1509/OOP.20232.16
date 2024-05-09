@@ -18,6 +18,7 @@ public class MyPanel extends JPanel{
     final Color COLOR = Color.black;
     final Color BACKGROUND_COLOR = Color.white;
     final Color INDICATING_COLOR = Color.gray;
+    final Color COLLECTING_COLOR = new Color(212, 175, 55);
     private String UoL;
     private JLabel gemsIndicator;
     private boolean paintLeft;
@@ -28,6 +29,7 @@ public class MyPanel extends JPanel{
     private int quan;
     private int i;
     private int isPointed = 0;
+    private int isCollected = 0;
     MyPanel(String ori,int i, int dan, int quan){
         gemsIndicator = new JLabel();
         paintLeft = paintRight = false;
@@ -65,8 +67,9 @@ public class MyPanel extends JPanel{
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(2));
-        if (isPointed == 0) g2D.setPaint(BACKGROUND_COLOR);
-        else if (isPointed ==1) g2D.setPaint(INDICATING_COLOR);
+        if (isPointed == 1) g2D.setPaint(INDICATING_COLOR);
+        else if (isCollected == 1) g2D.setPaint(COLLECTING_COLOR);
+        else g2D.setPaint(BACKGROUND_COLOR);
         switch (orientation) {
             case "left" -> {
                 setGemsIndicator();
@@ -116,8 +119,8 @@ public class MyPanel extends JPanel{
         drawGems(g2D);
     }
     private void drawGems(Graphics2D g2D){
-        if (isPointed == 0) g2D.setPaint(Color.black);
-        else if (isPointed == 1) g2D.setPaint(BACKGROUND_COLOR);
+        if (isCollected == 1 || isPointed == 1) g2D.setPaint(BACKGROUND_COLOR);
+        else g2D.setPaint(Color.black);
         switch(orientation){
             case "left" -> {
                 int MAX_GEM_PER_CIRCLE = 6;
@@ -221,7 +224,7 @@ public class MyPanel extends JPanel{
     }
     }
     private void setGemsIndicator(){
-        if (isPointed == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
+        if (isPointed == 1 || isCollected == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
         else gemsIndicator.setForeground(Color.black);
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
         gemsIndicator.setText(String.valueOf((dan + quan)));
@@ -259,6 +262,7 @@ public class MyPanel extends JPanel{
         showArrow = value;
     }
     public void setIsPointed(int i){isPointed = i;}
+    public void setIsCollected(int i){isCollected = i;}
     public void setPaintLeft(boolean paintLeft) {this.paintLeft = paintLeft;}
     public void setPaintRight(boolean paintRight) {this.paintRight = paintRight;}
 }

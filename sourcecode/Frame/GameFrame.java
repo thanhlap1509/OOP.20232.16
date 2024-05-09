@@ -62,8 +62,6 @@ public class GameFrame extends JFrame implements MouseListener {
         name1 = name1.toUpperCase();
         while (name2 == null || name2.isEmpty()) name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.QUESTION_MESSAGE);
         name2 = name2.toUpperCase();
-        System.out.println(name1);
-        System.out.println(name2);
         point1 = 0;
         point2 = 0;
         // try-catch reading png file into image instances then convert to image icon
@@ -270,7 +268,6 @@ public class GameFrame extends JFrame implements MouseListener {
         gemTimer.start();
     }
     public void recursiveSpreadGems(int startIndex, String direction){
-        System.out.println("recursive spreading");
         // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
         // we check if the next tile is outer tile or not
         // if not, we check if next tile has gem or not, if yes then spread gem again
@@ -293,7 +290,6 @@ public class GameFrame extends JFrame implements MouseListener {
                 }
             }
         } else {
-            System.out.println("IM ALL OUT OF GEM");
             addPoint();
             this.setEnabled(true);
             checkEndGame();
@@ -304,6 +300,7 @@ public class GameFrame extends JFrame implements MouseListener {
     // index += step, checkIndexForward, lastIndex = index
     //
     private void addPoint(){
+        System.out.println("index " + index);
         final int[] iter = {0};
         pointTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
             @Override
@@ -311,8 +308,11 @@ public class GameFrame extends JFrame implements MouseListener {
                 if (iter[0] < 6 && tiles[index].getDan() == 0){
                     index+= step;
                     checkIndexForward();
-                    System.out.println(index);
+                    tiles[lastIndex].setIsCollected(0);
+                    lastIndex = index;
+                    System.out.println(lastIndex);
                     if (tiles[index].getDan() > 0){
+                        tiles[index].setIsCollected(1);
                         int dan = tiles[index].getDan();
                         int quan = tiles[index].getQuan();
                         tiles[index].setDan(0);
@@ -328,6 +328,7 @@ public class GameFrame extends JFrame implements MouseListener {
                     }
                     else {
                         pointTimer.stop();
+                        tiles[lastIndex].setIsCollected(0);
                         afterTurnAction();
                     }
                     index += step;
@@ -335,6 +336,7 @@ public class GameFrame extends JFrame implements MouseListener {
                     iter[0]++;
                 }else {
                     pointTimer.stop();
+                    tiles[lastIndex].setIsCollected(0);
                     afterTurnAction();
                 }
             }
@@ -382,9 +384,8 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     @Override
     public void mouseClicked(MouseEvent e) {
-        System.out.println("PLAYER " + turn + " TURN");
         if (e.getSource() == exitMenu){
-            System.out.println("Exit");
+            // TODO: do something sparkle, maybe
             timer.cancel();
             this.dispose();
         }
@@ -397,7 +398,6 @@ public class GameFrame extends JFrame implements MouseListener {
                 //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
                     int index = ((MyPanel) e.getSource()).getI();
-                    System.out.println("Go left in tile " + index);
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
                     spreadGems(index, "left");
@@ -405,7 +405,6 @@ public class GameFrame extends JFrame implements MouseListener {
                 //if player click in right arrow
                 else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
                     int index = ((MyPanel) e.getSource()).getI();
-                    System.out.println("Go right in tile " + index);
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
                     spreadGems(index, "right");
