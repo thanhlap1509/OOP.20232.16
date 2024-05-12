@@ -1,8 +1,6 @@
 package sourcecode.Frame;
-import javax.swing.JFrame;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import java.awt.Color;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -14,6 +12,11 @@ public class MainFrame extends JFrame implements ActionListener{
     JButton helpButton;
     JButton exitButton;
     public MainFrame(){
+        JLabel title = new JLabel("Ô Ăn Quan");
+        title.setForeground(Color.white);
+        title.setFont(new Font("Arial", Font.BOLD, 40));
+        title.setBounds(150, 50, 250,  50);
+
         startButton = new JButton("Start");
         startButton.setBounds(200, 200, 100, 30);
         startButton.setFocusable(false);
@@ -36,6 +39,7 @@ public class MainFrame extends JFrame implements ActionListener{
         this.setResizable(false);
         this.setVisible(true);
         this.getContentPane().setBackground(new Color(0, 0, 0));
+        this.add(title);
         this.add(startButton);
         this.add(helpButton);
         this.add(exitButton);
