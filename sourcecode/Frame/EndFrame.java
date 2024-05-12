@@ -8,7 +8,6 @@ public class EndFrame extends JFrame{
     final int HEIGHT = 500;
     final Color BACKGROUND_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
-    final Border indicatorBorder = BorderFactory.createLineBorder(Color.black, 2);
     private JLabel winnerDisplay;
     private JPanel playerInfo;
     private JLabel player1Info;
@@ -25,11 +24,9 @@ public class EndFrame extends JFrame{
         }else if (point2 > point1){
             winnerDisplay.setText(name2 + " win");
         } else winnerDisplay.setText("Tie");
-        winnerDisplay.setBorder(indicatorBorder);
         winnerDisplay.setBounds(0, 0, 688, 100);
 
         playerInfo = new JPanel();
-        playerInfo.setBorder(indicatorBorder);
         playerInfo.setBounds(0, 100, 688, 365);
         playerInfo.setLayout(new GridLayout(1, 2));
         playerInfo.setBackground(BACKGROUND_COLOR);
