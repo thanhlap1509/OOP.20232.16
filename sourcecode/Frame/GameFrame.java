@@ -37,7 +37,9 @@ public class GameFrame extends JFrame implements MouseListener {
     private String name1;
     private String name2;
     private JLabel player1Info;
+    private ImageIcon player1ImgIcon;
     private JLabel player2Info;
+    private ImageIcon player2ImgIcon;
     private JLabel timerLabel;
     private JLabel gemInHand;
     private JMenu exitMenu;
@@ -104,15 +106,15 @@ public class GameFrame extends JFrame implements MouseListener {
         BufferedImage p1BuffImg = null;
         BufferedImage p2BuffImg = null;
         try{
-            p1BuffImg = ImageIO.read(new File("sourcecode/Frame/players1.png"));
-            p2BuffImg = ImageIO.read(new File("sourcecode/Frame/players2.png"));
+            p1BuffImg = ImageIO.read(new File("Picture/players1.png"));
+            p2BuffImg = ImageIO.read(new File("Picture/players2.png"));
         } catch (IOException e){
             System.out.println("read again");
         }
         Image player1Img = p1BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
-        ImageIcon player1ImgIcon = new ImageIcon(player1Img);
+        player1ImgIcon = new ImageIcon(player1Img);
         Image player2Img = p2BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
-        ImageIcon player2ImgIcon = new ImageIcon(player2Img);
+        player2ImgIcon = new ImageIcon(player2Img);
         //create two border, one for apply padding, one to paint with color and combine into compound border to indicate turn
         Border paddingBorder1 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
         Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
@@ -351,6 +353,7 @@ public class GameFrame extends JFrame implements MouseListener {
         if (tiles[11].getDan() + tiles[11].getQuan() == 0 && tiles[5].getDan() + tiles[5].getDan() == 0){
             timer.cancel();
             this.dispose();
+            new EndFrame(player1ImgIcon, player2ImgIcon, name1, name2, point1, point2);
             if (point1 > point2) System.out.println("player 1 win");
             else if (point2 > point1) System.out.println("player 2 win");
             else System.out.println("Tie");
