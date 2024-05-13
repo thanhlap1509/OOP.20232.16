@@ -109,7 +109,7 @@ public class GameFrame extends JFrame implements MouseListener {
             p1BuffImg = ImageIO.read(new File("Picture/players1.png"));
             p2BuffImg = ImageIO.read(new File("Picture/players2.png"));
         } catch (IOException e){
-            System.out.println("read again");
+            System.out.println("anh Nhớ em");
         }
         Image player1Img = p1BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
         player1ImgIcon = new ImageIcon(player1Img);
@@ -297,10 +297,7 @@ public class GameFrame extends JFrame implements MouseListener {
             this.setEnabled(true);
         }
     }
-    //stopIndex = stopping mark, lastIndex = tile to repaint, index = jumping point
-    // if tile's dan at index = 0, and tile's dan at index + step > 0, eat it
-    // index += step, checkIndexForward, lastIndex = index
-    //
+    //anh nhớ em
     private void addPoint(){
         System.out.println("index " + index);
         final int[] iter = {0};
@@ -417,7 +414,7 @@ public class GameFrame extends JFrame implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (e.getSource() == exitMenu){
-            // TODO: do something sparkle, maybe
+            // tại sao em lại rời bỏ anh
             timer.cancel();
             this.dispose();
         }
