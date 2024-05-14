@@ -347,9 +347,17 @@ public class GameFrame extends JFrame implements MouseListener {
         if (step == -1 && index == -1) index = 11;
     }
     public void checkEndGame(){
-        if (tiles[11].getDan() + tiles[11].getQuan() == 0 && tiles[5].getDan() + tiles[5].getDan() == 0){
+        if (tiles[11].getQuan() == 0 && tiles[5].getQuan() == 0){
             timer.cancel();
             this.dispose();
+            // get remaining dan in lower into player1
+            for (int i = 0; i < 5; i++){
+                point1 += tiles[i].getDan();
+            }
+            //get remaining dan in upper into player 2
+            for (int i = 6; i < 11; i++){
+                point2 += tiles[i].getDan();
+            }
             new EndFrame(player1ImgIcon, player2ImgIcon, name1, name2, point1, point2);
             if (point1 > point2) System.out.println("player 1 win");
             else if (point2 > point1) System.out.println("player 2 win");
