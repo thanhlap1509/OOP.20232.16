@@ -34,6 +34,7 @@ public class GameFrame extends JFrame implements MouseListener {
     final int SECOND_TO_SLEEP = 500;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
+    final int QUAN_POINT = 5;
     private String name1;
     private String name2;
     private JLabel player1Info;
@@ -317,11 +318,11 @@ public class GameFrame extends JFrame implements MouseListener {
                         tiles[index].setDan(0);
                         tiles[index].setQuan(0);
                         if (turn == 1){
-                            point1 += dan + quan*10;
+                            point1 += dan + quan*QUAN_POINT;
                             updateText1();
                         }
                         else if (turn == 2){
-                            point2 += dan + quan*10;
+                            point2 += dan + quan*QUAN_POINT;
                             updateText2();
                         }
                     }
