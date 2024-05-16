@@ -110,7 +110,7 @@ public class GameFrame extends JFrame implements MouseListener {
             p1BuffImg = ImageIO.read(new File("Picture/players1.png"));
             p2BuffImg = ImageIO.read(new File("Picture/players2.png"));
         } catch (IOException e){
-            System.out.println("anh Nhớ em");
+            System.out.println("anh nhớ em");
         }
         Image player1Img = p1BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
         player1ImgIcon = new ImageIcon(player1Img);
@@ -212,8 +212,7 @@ public class GameFrame extends JFrame implements MouseListener {
                     secondCountDown--;
                 } else {
                     timer.cancel();
-                    if (turn == 1) turn = 2;
-                    else turn = 1;
+                    changeTurn();
                     timerCountDown();
                 }
             }
