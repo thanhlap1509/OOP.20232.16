@@ -432,9 +432,10 @@ public class GameFrame extends JFrame implements MouseListener {
             // enable lower tiles access for player 1 and upper tiles for player 2
             if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
-                timer.cancel();
                 //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
+                    //timer cancel when click left arrow
+                    timer.cancel();
                     int index = ((MyPanel) e.getSource()).getI();
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
@@ -442,6 +443,8 @@ public class GameFrame extends JFrame implements MouseListener {
                 }
                 //if player click in right arrow
                 else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
+                    // timer cancel when click right arrow
+                    timer.cancel();
                     int index = ((MyPanel) e.getSource()).getI();
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
