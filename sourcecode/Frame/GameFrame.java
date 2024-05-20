@@ -58,7 +58,6 @@ public class GameFrame extends JFrame implements MouseListener {
     private int index = 0;
     private int step = 0;
     private int lastIndex;
-    private int stopIndex;
     GameFrame() {
         //Board game
         JPanel boardGameContainer = new JPanel();
