@@ -184,7 +184,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6));
         this.setLocationRelativeTo(null);
-        //this.setResizable(false);
+        this.setResizable(false);
         this.add(player2Container, BorderLayout.NORTH);
         this.add(boardGameContainer, BorderLayout.CENTER);
         this.add(player1Container, BorderLayout.SOUTH);
