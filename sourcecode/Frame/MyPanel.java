@@ -11,7 +11,7 @@ import java.awt.Font;
 public class MyPanel extends JPanel{
     private String orientation;
     final int GEM_SIZE = 8;
-    final int LARGE_GEM_SIZE = 10;
+    final int LARGE_GEM_SIZE = 12;
     final int MAX_GEM_PER_SQUARE = 7;
     static final int SIZE = 200;
     static final int MARGIN = 7;
@@ -35,7 +35,6 @@ public class MyPanel extends JPanel{
         paintLeft = paintRight = false;
         showArrow = false;
         this.setLayout(null);
-        //this.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
@@ -51,7 +50,6 @@ public class MyPanel extends JPanel{
         paintLeft = paintRight = false;
         showArrow = false;
         this.setLayout(null);
-        //this.setBorder(BorderFactory.createLineBorder(Color.yellow, 2));
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
         this.orientation = ori;
@@ -215,10 +213,6 @@ public class MyPanel extends JPanel{
                 //draw circle indicating number of small gems
                 for (int i = 0; i < dan; i++){
                     g2D.fillArc((int)(MARGIN*2 + 14 + (i % MAX_GEM_PER_SQUARE)*1.5*GEM_SIZE), (int)(MARGIN + 20 + (i / MAX_GEM_PER_SQUARE - 1)*1.5*GEM_SIZE), GEM_SIZE, GEM_SIZE, 0, 360);
-                }
-                //draw circle indicating number of large gems
-                for (int i = 0; i < quan; i++){
-                    g2D.fillArc((int)(MARGIN*2 + 14 + ((dan + i) % MAX_GEM_PER_SQUARE)*1.5*GEM_SIZE), (int)(MARGIN + 20 + ((dan + i) / MAX_GEM_PER_SQUARE - 1)*1.5*GEM_SIZE), LARGE_GEM_SIZE, LARGE_GEM_SIZE, 0, 360);
                 }
         }
     }

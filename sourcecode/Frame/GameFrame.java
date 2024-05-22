@@ -296,7 +296,6 @@ public class GameFrame extends JFrame implements MouseListener {
             this.setEnabled(true);
         }
     }
-    //anh nhớ em
     private void addPoint(){
         System.out.println("index " + index);
         final int[] iter = {0};
