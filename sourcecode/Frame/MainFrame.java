@@ -46,7 +46,7 @@ public class MainFrame extends JFrame implements ActionListener{
     }
     //help window
     public void showGuideline() throws IOException{
-        BufferedReader br = new BufferedReader(new FileReader("sourcecode/guideline.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("guideline/guideline.txt"));
         String buffer;
         String final_text = "";
         while ((buffer = br.readLine()) != null){
