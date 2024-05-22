@@ -44,6 +44,7 @@ public class MainFrame extends JFrame implements ActionListener{
         this.add(helpButton);
         this.add(exitButton);
     }
+
     //help window
     public void showGuideline() throws IOException{
         BufferedReader br = new BufferedReader(new FileReader("guideline/guideline.txt"));
