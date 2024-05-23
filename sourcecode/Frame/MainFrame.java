@@ -1,14 +1,9 @@
 package sourcecode.Frame;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import javax.swing.JOptionPane;
-import java.awt.Color;
-import java.awt.Font;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -17,9 +12,9 @@ public class MainFrame extends JFrame implements ActionListener{
     JButton helpButton;
     JButton exitButton;
     public MainFrame(){
-        JLabel title = new JLabel("O An Quan");
-        title.setForeground(new Color(57, 255, 20));
-        title.setFont(new Font("MV Boli", Font.PLAIN, 40));
+        JLabel title = new JLabel("Ô Ăn Quan");
+        title.setForeground(Color.white);
+        title.setFont(new Font("Arial", Font.BOLD, 40));
         title.setBounds(150, 50, 250,  50);
 
         startButton = new JButton("Start");
@@ -36,11 +31,10 @@ public class MainFrame extends JFrame implements ActionListener{
         exitButton.setBounds(200, 300, 100, 30);
         exitButton.setFocusable(false);
         exitButton.addActionListener(this);
-
         this.setTitle("Main Window");
+        this.setSize(500, 500);
         this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         this.setLayout(null);
-        this.setSize(500, 500);
         this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setVisible(true);
@@ -50,15 +44,16 @@ public class MainFrame extends JFrame implements ActionListener{
         this.add(helpButton);
         this.add(exitButton);
     }
+
     //help window
     public void showGuideline() throws IOException{
-        BufferedReader br = new BufferedReader(new FileReader("sourcecode/guideline.txt"));
+        BufferedReader br = new BufferedReader(new FileReader("guideline/guideline.txt"));
         String buffer;
         String final_text = "";
         while ((buffer = br.readLine()) != null){
             final_text += buffer + "\n";
         }
-        JOptionPane.showMessageDialog(this, final_text, "Game Rule", JOptionPane.PLAIN_MESSAGE);
+        JOptionPane.showMessageDialog(this, final_text, "Game Rule", JOptionPane.INFORMATION_MESSAGE);
         br.close();
         return;
     }
