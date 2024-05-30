@@ -109,7 +109,7 @@ public class GameFrame extends JFrame implements MouseListener {
             p1BuffImg = ImageIO.read(new File("Picture/players1.png"));
             p2BuffImg = ImageIO.read(new File("Picture/players2.png"));
         } catch (IOException e){
-            System.out.println("anh nhớ em");
+            System.out.println("lỗi rồi ông giáo ơi");
         }
         Image player1Img = p1BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
         player1ImgIcon = new ImageIcon(player1Img);
@@ -297,7 +297,6 @@ public class GameFrame extends JFrame implements MouseListener {
         }
     }
     private void addPoint(){
-        System.out.println("index " + index);
         final int[] iter = {0};
         pointTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
             @Override
@@ -307,7 +306,6 @@ public class GameFrame extends JFrame implements MouseListener {
                     checkIndexForward();
                     tiles[lastIndex].setIsCollected(0);
                     lastIndex = index;
-                    System.out.println(lastIndex);
                     if (tiles[index].getDan() > 0){
                         tiles[index].setIsCollected(1);
                         int dan = tiles[index].getDan();
@@ -345,21 +343,18 @@ public class GameFrame extends JFrame implements MouseListener {
         if (step == -1 && index == -1) index = 11;
     }
     public void checkEndGame(){
-        if (tiles[11].getQuan() == 0 && tiles[5].getQuan() == 0){
+        if (tiles[11].getDan() == 0 && tiles[11].getQuan() == 0 && tiles[5].getQuan() == 0 && tiles[5].getDan() == 0){
             timer.cancel();
             this.dispose();
-            // get remaining dan in lower into player1
+            // get remaining dan in lower belong to player1
             for (int i = 0; i < 5; i++){
                 point1 += tiles[i].getDan();
             }
-            //get remaining dan in upper into player 2
+            //get remaining dan in upper belong to player 2
             for (int i = 6; i < 11; i++){
                 point2 += tiles[i].getDan();
             }
             new EndFrame(player1ImgIcon, player2ImgIcon, name1, name2, point1, point2);
-            if (point1 > point2) System.out.println("player 1 win");
-            else if (point2 > point1) System.out.println("player 2 win");
-            else System.out.println("Tie");
         }
     }
     private void afterTurnAction(){
