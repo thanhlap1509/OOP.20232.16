@@ -1,4 +1,8 @@
 package sourcecode.Frame;
+import sourcecode.Panel.HalfCircleSquare;
+import sourcecode.Panel.MyPanel;
+import sourcecode.Panel.SquarePanel;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuBar;
@@ -63,10 +67,10 @@ public class GameFrame extends JFrame implements MouseListener {
         JPanel boardGameContainer = new JPanel();
         tiles = new MyPanel[12];
         //left tiles
-        tiles[11] = new MyPanel("left",11, 0, 1);
+        tiles[11] = new HalfCircleSquare("left",11, 0, 1);
         tiles[11].addMouseListener(this);
         //right tiles
-        tiles[5] = new MyPanel("right",6, 0, 1);
+        tiles[5] = new HalfCircleSquare("right",6, 0, 1);
         tiles[5].addMouseListener(this);
         //center tiles
         JPanel centerTiles = new JPanel();
@@ -75,7 +79,7 @@ public class GameFrame extends JFrame implements MouseListener {
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
         for (int i = 10; i > 5; i--){
-            tiles[i] = new MyPanel("center", "upper", i, 5, 0);
+            tiles[i] = new SquarePanel("upper", i, 5, 0);
             tiles[i].addMouseListener(this);
             upper.add(tiles[i]);
         }
@@ -83,7 +87,7 @@ public class GameFrame extends JFrame implements MouseListener {
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
         for (int i = 0; i < 5; i++){
-            tiles[i] = new MyPanel("center", "lower", i, 5, 0);
+            tiles[i] = new SquarePanel("lower", i, 5, 0);
             tiles[i].addMouseListener(this);
             lower.add(tiles[i]);
         }
@@ -420,10 +424,10 @@ public class GameFrame extends JFrame implements MouseListener {
             this.dispose();
         }
         //only accept center square
-        else if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center") && ((MyPanel) e.getSource()).getDan() > 0){
+        else if (e.getSource() instanceof SquarePanel && ((MyPanel) e.getSource()).getDan() > 0){
             // enable lower tiles access for player 1 and upper tiles for player 2
-            if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
-                    || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
+            if ((turn == 1 && ((SquarePanel) e.getSource()).getUoL().equals("lower"))
+                    || (turn == 2 && ((SquarePanel) e.getSource()).getUoL().equals("upper"))){
                 //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
                     //timer cancel when click left arrow
@@ -450,13 +454,13 @@ public class GameFrame extends JFrame implements MouseListener {
     public void mousePressed(MouseEvent e) {
         //paint arrow if mouse enter arrow
         //if player click in left arrow
-        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getDan() > 0){
+        if (e.getSource() instanceof SquarePanel && ((MyPanel) e.getSource()).getDan() > 0){
             if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
-                ((MyPanel) e.getSource()).setPaintLeft(true);
+                ((SquarePanel) e.getSource()).setPaintLeft(true);
             }
             //if player click in right arrow
             else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth) {
-                ((MyPanel) e.getSource()).setPaintRight(true);
+                ((SquarePanel) e.getSource()).setPaintRight(true);
             }
         }
     }
@@ -468,21 +472,21 @@ public class GameFrame extends JFrame implements MouseListener {
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center") && ((MyPanel) e.getSource()).getDan() > 0){
+        if (e.getSource() instanceof SquarePanel && ((SquarePanel) e.getSource()).getDan() > 0){
             // enable lower tiles access for player 1 and upper tiles for player 2
-            if ((turn == 1 && ((MyPanel) e.getSource()).getUoL().equals("lower"))
-                    || (turn == 2 && ((MyPanel) e.getSource()).getUoL().equals("upper"))){
-                ((MyPanel) e.getSource()).setArrow(true);
+            if ((turn == 1 && ((SquarePanel) e.getSource()).getUoL().equals("lower"))
+                    || (turn == 2 && ((SquarePanel) e.getSource()).getUoL().equals("upper"))){
+                ((SquarePanel) e.getSource()).setArrow(true);
                 ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
         }
     }
     @Override
     public void mouseExited(MouseEvent e) {
-        if (e.getSource() instanceof MyPanel && ((MyPanel) e.getSource()).getOrientation().equals("center")){
-            ((MyPanel) e.getSource()).setArrow(false);
-            ((MyPanel) e.getSource()).setPaintLeft(false);
-            ((MyPanel) e.getSource()).setPaintRight(false);
+        if (e.getSource() instanceof SquarePanel){
+            ((SquarePanel) e.getSource()).setArrow(false);
+            ((SquarePanel) e.getSource()).setPaintLeft(false);
+            ((SquarePanel) e.getSource()).setPaintRight(false);
             ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
         }
     }
