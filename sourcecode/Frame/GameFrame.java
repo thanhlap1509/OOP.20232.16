@@ -3,6 +3,7 @@ import sourcecode.Panel.HalfCircleSquare;
 import sourcecode.Panel.MyPanel;
 import sourcecode.Panel.SquarePanel;
 import sourcecode.Player.Player;
+import sourcecode.Player.PlayerContainer;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,20 +35,17 @@ import java.util.Timer;
 import javax.imageio.ImageIO;
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 890;
-    final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
     final int SECOND_TO_SLEEP = 300;
-    final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
     final int QUAN_POINT = 5;
     private Player player1;
     private Player player2;
-    private JLabel player1Info;
-    private JLabel player2Info;
     private JLabel timerLabel;
     private JLabel gemInHand;
-    private JMenu exitMenu;
     private MyPanel[] tiles;
+    private PlayerContainer player2Container;
+    private PlayerContainer player1Container;
     private Border compoundBorder1;
     private Border compoundBorder2;
     private int secondCountDown;
@@ -59,9 +57,30 @@ public class GameFrame extends JFrame implements MouseListener {
     private int index = 0;
     private int step = 0;
     private int lastIndex;
+    private JPanel boardGameContainer;
     GameFrame() {
+        //set initial turn to player 1
+        turn = 1;
+        createGameBoard();
+        createTimer();
+        createGemIndicator();
+        initializePlayer();
+        //frame
+        this.setTitle("Game Frame");
+        this.setLayout(new BorderLayout());
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6));
+        this.setLocationRelativeTo(null);
+        this.setResizable(false);
+        this.add(player2Container, BorderLayout.NORTH);
+        this.add(boardGameContainer, BorderLayout.CENTER);
+        this.add(player1Container, BorderLayout.SOUTH);
+        this.setVisible(true);
+        timerCountDown();
+    }
+    private void createGameBoard(){
         //Board game
-        JPanel boardGameContainer = new JPanel();
+        boardGameContainer = new JPanel();
         tiles = new MyPanel[12];
         //left tiles
         tiles[11] = new HalfCircleSquare("left",11, 0, 1);
@@ -96,6 +115,8 @@ public class GameFrame extends JFrame implements MouseListener {
         boardGameContainer.add(tiles[11], BorderLayout.WEST);
         boardGameContainer.add(centerTiles, BorderLayout.CENTER);
         boardGameContainer.add(tiles[5], BorderLayout.EAST);
+    }
+    private void initializePlayer(){
         //getting name,imageicon for two player and initiate point = 0
         String name1= null;
         String name2 = null;
@@ -124,24 +145,18 @@ public class GameFrame extends JFrame implements MouseListener {
         Border indicatorBorder = BorderFactory.createLineBorder(Color.yellow, 2);
         compoundBorder1 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder1);
         compoundBorder2 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder2);
-        //player 1 container
-        player1Info = new JLabel();
-        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + player1.getPoint() + "</div></html>");
-        player1Info.setForeground(TEXT_COLOR);
-        player1Info.setIcon(player1ImgIcon);
-        player1Info.setHorizontalTextPosition(JLabel.RIGHT);
-        player1Info.setVerticalTextPosition(JLabel.CENTER);
-        player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.9) + PLAYER_INFO_WIDTH - HEADER_SIZE - 13, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
-        //player 2 container
-        player2Info = new JLabel();
-        player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + player2.getPoint() + "</div></html>");
-        player2Info.setForeground(TEXT_COLOR);
-        player2Info.setIcon(player2ImgIcon);
-        player2Info.setHorizontalTextPosition(JLabel.RIGHT);
-        player2Info.setVerticalTextPosition(JLabel.CENTER);
-        player2Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.9) + PLAYER_INFO_WIDTH - HEADER_SIZE - 13,0, PLAYER_INFO_WIDTH + name2.length()*5, HEADER_SIZE);
+        //players container
+        player2Container = new PlayerContainer(player2);
+        player2Container.addComponent(timerLabel);
+        player2Container.addPlayerInfo();
+        player2Container.addComponent(gemInHand);
+        // -----
+        player1Container = new PlayerContainer(player1);
+
+        player1Container.addPlayerInfo();
+    }
+    private void createTimer(){
         //initiate timer label
-        turn = 1;
         timerLabel = new JLabel();
         timerLabel.setFont(new Font("Arial", Font.BOLD, 18));
         timerLabel.setBorder(new EmptyBorder(5, 5 , 0, 0));
@@ -150,7 +165,8 @@ public class GameFrame extends JFrame implements MouseListener {
         timerLabel.setVerticalAlignment(SwingConstants.TOP);
         timerLabel.setHorizontalTextPosition(JLabel.LEFT);
         timerLabel.setBounds(0, 0, 150, 50);
-        timerCountDown();
+    }
+    private void createGemIndicator(){
         //set up gem indicator
         gemInHand = new JLabel();
         gemInHand.setFont(new Font("Arial", Font.BOLD, 18));
@@ -161,37 +177,6 @@ public class GameFrame extends JFrame implements MouseListener {
         gemInHand.setHorizontalTextPosition(JLabel.RIGHT);
         gemInHand.setBounds(0, 0, FRAME_WIDTH - 15, 50);
         setGem(0);
-        //players container
-        JPanel player2Container = new JPanel();
-        player2Container.setLayout(null);
-        player2Container.setBackground(HEADER_COLOR);
-        player2Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
-        player2Container.add(timerLabel);
-        player2Container.add(player2Info);
-        player2Container.add(gemInHand);
-        // -----
-        JPanel player1Container = new JPanel();
-        player1Container.setLayout(null);
-        player1Container.setBackground(HEADER_COLOR);
-        player1Container.setPreferredSize(new Dimension(HEADER_SIZE, HEADER_SIZE));
-        player1Container.add(player1Info);
-            //menu bar
-        JMenuBar menuBar = new JMenuBar();
-        exitMenu = new JMenu("Exit");
-        exitMenu.addMouseListener(this);
-        menuBar.add(exitMenu);
-        //frame
-        this.setTitle("Game Frame");
-        this.setJMenuBar(menuBar);
-        this.setLayout(new BorderLayout());
-        this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6));
-        this.setLocationRelativeTo(null);
-        this.setResizable(false);
-        this.add(player2Container, BorderLayout.NORTH);
-        this.add(boardGameContainer, BorderLayout.CENTER);
-        this.add(player1Container, BorderLayout.SOUTH);
-        this.setVisible(true);
     }
     private void timerCountDown(){
         checkEndGame();
@@ -199,12 +184,12 @@ public class GameFrame extends JFrame implements MouseListener {
         timer = new Timer();
         secondCountDown = 60;
         if (turn == 1){
-            player2Info.setBorder(null);
-            player1Info.setBorder(compoundBorder1);
+            player2Container.setPlayerInfoBorder(null);
+            player1Container.setPlayerInfoBorder(compoundBorder1);
         }
         else {
-            player1Info.setBorder(null);
-            player2Info.setBorder(compoundBorder2);
+            player1Container.setPlayerInfoBorder(null);
+            player2Container.setPlayerInfoBorder(compoundBorder2);
         }
         timer.scheduleAtFixedRate(new TimerTask() {
             public void run() {
@@ -367,10 +352,10 @@ public class GameFrame extends JFrame implements MouseListener {
         timerCountDown();
     }
     private void updateText1() {
-        player1Info.setText("<html><div style='text-align:left;'>"+ player1.getName() + "<br>Points:"  + player1.getPoint() + "</div></html>");
+        player1Container.setPlayerInfoText();
     }
     private void updateText2(){
-        player2Info.setText("<html><div style='text-align:left;'>"+ player2.getName() + "<br>Points:"  + player2.getPoint() + "</div></html>");
+        player2Container.setPlayerInfoText();
     }
     private void checkUpperRow(){
         int full0 = 1;
@@ -417,18 +402,13 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getSource() == exitMenu){
-            // tại sao em lại rời bỏ anh
-            timer.cancel();
-            this.dispose();
-        }
         //only accept center square
-        else if (e.getSource() instanceof SquarePanel && ((MyPanel) e.getSource()).getDan() > 0){
+        if (e.getSource() instanceof SquarePanel && ((SquarePanel) e.getSource()).getDan() > 0){
             // enable lower tiles access for player 1 and upper tiles for player 2
             if ((turn == 1 && ((SquarePanel) e.getSource()).getUoL().equals("lower"))
                     || (turn == 2 && ((SquarePanel) e.getSource()).getUoL().equals("upper"))){
                 //if player click in left arrow
-                if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
+                if (e.getX() >= 0 && e.getX() <= ((SquarePanel) e.getSource()).getArrowWidth()){
                     //timer cancel when click left arrow
                     timer.cancel();
                     int index = ((MyPanel) e.getSource()).getI();
@@ -437,10 +417,10 @@ public class GameFrame extends JFrame implements MouseListener {
                     spreadGems(index, "left");
                 }
                 //if player click in right arrow
-                else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth){
+                else if (e.getX() >= ((SquarePanel)e.getSource()).getWidth() - ((SquarePanel) e.getSource()).getArrowWidth()){
                     // timer cancel when click right arrow
                     timer.cancel();
-                    int index = ((MyPanel) e.getSource()).getI();
+                    int index = ((SquarePanel) e.getSource()).getI();
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
                     spreadGems(index, "right");
@@ -454,11 +434,11 @@ public class GameFrame extends JFrame implements MouseListener {
         //paint arrow if mouse enter arrow
         //if player click in left arrow
         if (e.getSource() instanceof SquarePanel && ((MyPanel) e.getSource()).getDan() > 0){
-            if (e.getX() >= 0 && e.getX() <= ((MyPanel) e.getSource()).arrowWidth){
+            if (e.getX() >= 0 && e.getX() <= ((SquarePanel) e.getSource()).getArrowWidth()){
                 ((SquarePanel) e.getSource()).setPaintLeft(true);
             }
             //if player click in right arrow
-            else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((MyPanel) e.getSource()).arrowWidth) {
+            else if (e.getX() >= ((MyPanel)e.getSource()).getWidth() - ((SquarePanel) e.getSource()).getArrowWidth()) {
                 ((SquarePanel) e.getSource()).setPaintRight(true);
             }
         }

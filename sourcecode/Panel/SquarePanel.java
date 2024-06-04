@@ -6,6 +6,7 @@ public class SquarePanel extends MyPanel{
     private boolean paintLeft;
     private boolean paintRight;
     private boolean showArrow;
+    private int arrowWidth;
     private String UoL;
     public SquarePanel(String UoL, int i, int dan, int quan) {
         super( i, dan, quan);
@@ -72,6 +73,9 @@ public class SquarePanel extends MyPanel{
     public void setPaintRight(boolean paintRight) {this.paintRight = paintRight;}
     public String getUoL() {
         return UoL;
+    }
+    public int getArrowWidth(){
+        return arrowWidth;
     }
 }
 

@@ -20,7 +20,6 @@ public abstract class MyPanel extends JPanel{
     static final int MARGIN = 7;
     private final int i;
     public JLabel gemsIndicator;
-    public int arrowWidth;
     private int dan;
     private int quan;
     private int isPointed = 0;
