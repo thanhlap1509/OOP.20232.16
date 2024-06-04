@@ -2,6 +2,7 @@ package sourcecode.Frame;
 import sourcecode.Panel.HalfCircleSquare;
 import sourcecode.Panel.MyPanel;
 import sourcecode.Panel.SquarePanel;
+import sourcecode.Player.Player;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -35,16 +36,14 @@ public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 890;
     final int PLAYER_INFO_WIDTH = 175;
     final int HEADER_SIZE = 115;
-    final int SECOND_TO_SLEEP = 500;
+    final int SECOND_TO_SLEEP = 300;
     final Color HEADER_COLOR = Color.black;
     final Color TEXT_COLOR = Color.white;
     final int QUAN_POINT = 5;
-    private String name1;
-    private String name2;
+    private Player player1;
+    private Player player2;
     private JLabel player1Info;
-    private ImageIcon player1ImgIcon;
     private JLabel player2Info;
-    private ImageIcon player2ImgIcon;
     private JLabel timerLabel;
     private JLabel gemInHand;
     private JMenu exitMenu;
@@ -56,8 +55,6 @@ public class GameFrame extends JFrame implements MouseListener {
     private javax.swing.Timer gemTimer = null;
     private javax.swing.Timer pointTimer = null;
     private int turn;
-    private int point1;
-    private int point2;
     private int gemToSpread = 0;
     private int index = 0;
     private int step = 0;
@@ -99,13 +96,13 @@ public class GameFrame extends JFrame implements MouseListener {
         boardGameContainer.add(tiles[11], BorderLayout.WEST);
         boardGameContainer.add(centerTiles, BorderLayout.CENTER);
         boardGameContainer.add(tiles[5], BorderLayout.EAST);
-        //getting name for two player and initiate point = 0
+        //getting name,imageicon for two player and initiate point = 0
+        String name1= null;
+        String name2 = null;
         while (name1 == null|| name1.isEmpty()) name1 = JOptionPane.showInputDialog(this, "Input name for first player", "", JOptionPane.QUESTION_MESSAGE);
         name1 = name1.toUpperCase();
         while (name2 == null || name2.isEmpty()) name2 = JOptionPane.showInputDialog(this, "Input name for second player", "", JOptionPane.QUESTION_MESSAGE);
         name2 = name2.toUpperCase();
-        point1 = 0;
-        point2 = 0;
         // try-catch reading png file into image instances then convert to image icon
         BufferedImage p1BuffImg = null;
         BufferedImage p2BuffImg = null;
@@ -116,9 +113,11 @@ public class GameFrame extends JFrame implements MouseListener {
             System.out.println("lỗi rồi ông giáo ơi");
         }
         Image player1Img = p1BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
-        player1ImgIcon = new ImageIcon(player1Img);
+        ImageIcon player1ImgIcon = new ImageIcon(player1Img);
         Image player2Img = p2BuffImg.getScaledInstance(HEADER_SIZE, HEADER_SIZE, Image.SCALE_DEFAULT);
-        player2ImgIcon = new ImageIcon(player2Img);
+        ImageIcon player2ImgIcon = new ImageIcon(player2Img);
+        player1 = new Player(name1, 0, player1ImgIcon);
+        player2 = new Player(name2, 0, player2ImgIcon);
         //create two border, one for apply padding, one to paint with color and combine into compound border to indicate turn
         Border paddingBorder1 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
         Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
@@ -127,7 +126,7 @@ public class GameFrame extends JFrame implements MouseListener {
         compoundBorder2 = BorderFactory.createCompoundBorder(indicatorBorder, paddingBorder2);
         //player 1 container
         player1Info = new JLabel();
-        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
+        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + player1.getPoint() + "</div></html>");
         player1Info.setForeground(TEXT_COLOR);
         player1Info.setIcon(player1ImgIcon);
         player1Info.setHorizontalTextPosition(JLabel.RIGHT);
@@ -135,7 +134,7 @@ public class GameFrame extends JFrame implements MouseListener {
         player1Info.setBounds((int) (PLAYER_INFO_WIDTH * 1.9) + PLAYER_INFO_WIDTH - HEADER_SIZE - 13, 0, PLAYER_INFO_WIDTH + name1.length()*5, HEADER_SIZE);
         //player 2 container
         player2Info = new JLabel();
-        player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + point2 + "</div></html>");
+        player2Info.setText("<html><div style='text-align:left;'>" + name2 + "<br>Points:" + player2.getPoint() + "</div></html>");
         player2Info.setForeground(TEXT_COLOR);
         player2Info.setIcon(player2ImgIcon);
         player2Info.setHorizontalTextPosition(JLabel.RIGHT);
@@ -317,11 +316,11 @@ public class GameFrame extends JFrame implements MouseListener {
                         tiles[index].setDan(0);
                         tiles[index].setQuan(0);
                         if (turn == 1){
-                            point1 += dan + quan*QUAN_POINT;
+                            player1.setPoint(player1.getPoint() + dan + quan*QUAN_POINT);
                             updateText1();
                         }
                         else if (turn == 2){
-                            point2 += dan + quan*QUAN_POINT;
+                            player2.setPoint(player2.getPoint() + dan + quan*QUAN_POINT);
                             updateText2();
                         }
                     }
@@ -352,13 +351,13 @@ public class GameFrame extends JFrame implements MouseListener {
             this.dispose();
             // get remaining dan in lower belong to player1
             for (int i = 0; i < 5; i++){
-                point1 += tiles[i].getDan();
+                player1.setPoint(player1.getPoint() + tiles[i].getDan());
             }
             //get remaining dan in upper belong to player 2
             for (int i = 6; i < 11; i++){
-                point2 += tiles[i].getDan();
+                player2.setPoint(player2.getPoint() + tiles[i].getDan());
             }
-            new EndFrame(player1ImgIcon, player2ImgIcon, name1, name2, point1, point2);
+            new EndFrame(player1, player2);
         }
     }
     private void afterTurnAction(){
@@ -368,10 +367,10 @@ public class GameFrame extends JFrame implements MouseListener {
         timerCountDown();
     }
     private void updateText1() {
-        player1Info.setText("<html><div style='text-align:left;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
+        player1Info.setText("<html><div style='text-align:left;'>"+ player1.getName() + "<br>Points:"  + player1.getPoint() + "</div></html>");
     }
     private void updateText2(){
-        player2Info.setText("<html><div style='text-align:left;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
+        player2Info.setText("<html><div style='text-align:left;'>"+ player2.getName() + "<br>Points:"  + player2.getPoint() + "</div></html>");
     }
     private void checkUpperRow(){
         int full0 = 1;
@@ -385,7 +384,7 @@ public class GameFrame extends JFrame implements MouseListener {
             for (int i = 6; i < 11; i++){
                 tiles[i].setDan(tiles[i].getDan() + 1);
             }
-            point2 -= 5;
+            player2.setPoint(player2.getPoint() - 5);
             updateText2();
         }
     }
@@ -401,7 +400,7 @@ public class GameFrame extends JFrame implements MouseListener {
             for (int i = 0; i < 5; i++){
                 tiles[i].setDan(tiles[i].getDan() + 1);
             }
-            point1 -= 5;
+            player1.setPoint(player1.getPoint() - 5);
             updateText1();
         }
     }
