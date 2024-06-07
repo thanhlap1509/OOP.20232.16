@@ -7,8 +7,6 @@ import sourcecode.Player.PlayerContainer;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
 import javax.swing.JPanel;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
@@ -16,10 +14,10 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.BorderFactory;
 import javax.swing.SwingConstants;
+import javax.swing.Timer;
 import java.awt.Font;
 import java.awt.Color;
 import java.awt.Image;
-import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -31,7 +29,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.TimerTask;
-import java.util.Timer;
 import javax.imageio.ImageIO;
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 889;
@@ -50,8 +47,8 @@ public class GameFrame extends JFrame implements MouseListener {
     private Border compoundBorder2;
     private int secondCountDown;
     private Timer timer;
-    private javax.swing.Timer gemTimer = null;
-    private javax.swing.Timer pointTimer = null;
+    private Timer gemTimer = null;
+    private Timer pointTimer = null;
     private int turn;
     private int gemToSpread = 0;
     private int index = 0;
@@ -65,6 +62,7 @@ public class GameFrame extends JFrame implements MouseListener {
         createTimer();
         createGemIndicator();
         initializePlayer();
+        timerCountDown();
         //frame
         this.setTitle("Game Frame");
         this.setLayout(new BorderLayout());
@@ -76,7 +74,6 @@ public class GameFrame extends JFrame implements MouseListener {
         this.add(boardGameContainer, BorderLayout.CENTER);
         this.add(player1Container, BorderLayout.SOUTH);
         this.setVisible(true);
-        timerCountDown();
     }
     private void createGameBoard(){
         //Board game
@@ -181,7 +178,6 @@ public class GameFrame extends JFrame implements MouseListener {
     private void timerCountDown(){
         checkEndGame();
         //create timer, changing header display according to turn
-        timer = new Timer();
         secondCountDown = 60;
         if (turn == 1){
             player2Container.setPlayerInfoBorder(null);
@@ -191,19 +187,22 @@ public class GameFrame extends JFrame implements MouseListener {
             player1Container.setPlayerInfoBorder(null);
             player2Container.setPlayerInfoBorder(compoundBorder2);
         }
-        timer.scheduleAtFixedRate(new TimerTask() {
-            public void run() {
+        timer = new Timer(1000, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
                 if (secondCountDown >= 0) {
                     String string = String.format("Timer: %02d:%02d", secondCountDown / 60, secondCountDown % 60);
                     timerLabel.setText(string);
                     secondCountDown--;
                 } else {
-                    timer.cancel();
+                    timer.stop();
                     changeTurn();
                     timerCountDown();
                 }
             }
-        }, 0, 1000); // Run the task every second
+        });
+        timer.setInitialDelay(10);
+        timer.start();
     }
     private void setGem(int gems){
         gemInHand.setText("Gem: " + gems);
@@ -234,7 +233,7 @@ public class GameFrame extends JFrame implements MouseListener {
         index += step;
         checkIndexForward();
         //spread gem from next tile
-         gemTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
+         gemTimer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
 
              @Override
              public void actionPerformed(ActionEvent e) {
@@ -286,7 +285,7 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     private void addPoint(){
         final int[] iter = {0};
-        pointTimer = new javax.swing.Timer(SECOND_TO_SLEEP, new ActionListener() {
+        pointTimer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (iter[0] < 6 && tiles[index].getDan() == 0){
@@ -332,7 +331,7 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     public void checkEndGame(){
         if (tiles[11].getDan() == 0 && tiles[11].getQuan() == 0 && tiles[5].getQuan() == 0 && tiles[5].getDan() == 0){
-            timer.cancel();
+            timer.stop();
             this.dispose();
             // get remaining dan in lower belong to player1
             for (int i = 0; i < 5; i++){
@@ -410,7 +409,7 @@ public class GameFrame extends JFrame implements MouseListener {
                 //if player click in left arrow
                 if (e.getX() >= 0 && e.getX() <= ((SquarePanel) e.getSource()).getArrowWidth()){
                     //timer cancel when click left arrow
-                    timer.cancel();
+                    timer.stop();
                     int index = ((MyPanel) e.getSource()).getI();
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
@@ -419,7 +418,7 @@ public class GameFrame extends JFrame implements MouseListener {
                 //if player click in right arrow
                 else if (e.getX() >= ((SquarePanel)e.getSource()).getWidth() - ((SquarePanel) e.getSource()).getArrowWidth()){
                     // timer cancel when click right arrow
-                    timer.cancel();
+                    timer.stop();
                     int index = ((SquarePanel) e.getSource()).getI();
                     //stop user from interact with tile anymore
                     this.setEnabled(false);
