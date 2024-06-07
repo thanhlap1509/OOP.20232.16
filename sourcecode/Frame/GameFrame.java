@@ -33,7 +33,7 @@ import javax.imageio.ImageIO;
 public class GameFrame extends JFrame implements MouseListener {
     final int FRAME_WIDTH = 889;
     final int HEADER_SIZE = 115;
-    final int SECOND_TO_SLEEP = 300;
+    final int SECOND_TO_SLEEP = 400;
     final Color TEXT_COLOR = Color.white;
     final int QUAN_POINT = 5;
     private Player player1;
@@ -46,9 +46,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private Border compoundBorder1;
     private Border compoundBorder2;
     private int secondCountDown;
-    private Timer timer;
-    private Timer gemTimer = null;
-    private Timer pointTimer = null;
+    private Timer timer = null;
     private int turn;
     private int gemToSpread = 0;
     private int index = 0;
@@ -69,7 +67,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6) + 5);
         this.setLocationRelativeTo(null);
-        this.setResizable(true);
+        this.setResizable(false);
         this.add(player2Container, BorderLayout.NORTH);
         this.add(boardGameContainer, BorderLayout.CENTER);
         this.add(player1Container, BorderLayout.SOUTH);
@@ -233,7 +231,7 @@ public class GameFrame extends JFrame implements MouseListener {
         index += step;
         checkIndexForward();
         //spread gem from next tile
-         gemTimer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
+         timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
 
              @Override
              public void actionPerformed(ActionEvent e) {
@@ -248,13 +246,14 @@ public class GameFrame extends JFrame implements MouseListener {
                      index += step;
                      checkIndexForward();
                  } else {
-                     gemTimer.stop();
+                     timer.stop();
                      tiles[lastIndex].setIsPointed(0);
                      recursiveSpreadGems(startIndex, direction);
                  }
              }
          });
-        gemTimer.start();
+         timer.setInitialDelay(10);
+        timer.start();
     }
     public void recursiveSpreadGems(int startIndex, String direction){
         // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
@@ -285,7 +284,7 @@ public class GameFrame extends JFrame implements MouseListener {
     }
     private void addPoint(){
         final int[] iter = {0};
-        pointTimer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
+        timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (iter[0] < 6 && tiles[index].getDan() == 0){
@@ -309,7 +308,7 @@ public class GameFrame extends JFrame implements MouseListener {
                         }
                     }
                     else {
-                        pointTimer.stop();
+                        timer.stop();
                         tiles[lastIndex].setIsCollected(0);
                         afterTurnAction();
                     }
@@ -317,13 +316,14 @@ public class GameFrame extends JFrame implements MouseListener {
                     checkIndexForward();
                     iter[0]++;
                 }else {
-                    pointTimer.stop();
+                    timer.stop();
                     tiles[lastIndex].setIsCollected(0);
                     afterTurnAction();
                 }
             }
         });
-        pointTimer.start();
+        timer.setInitialDelay(10);
+        timer.start();
     }
     public void checkIndexForward(){
         if (step == 1 && index == 12) index = 0;
