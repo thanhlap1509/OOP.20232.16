@@ -34,7 +34,7 @@ import java.util.TimerTask;
 import java.util.Timer;
 import javax.imageio.ImageIO;
 public class GameFrame extends JFrame implements MouseListener {
-    final int FRAME_WIDTH = 890;
+    final int FRAME_WIDTH = 889;
     final int HEADER_SIZE = 115;
     final int SECOND_TO_SLEEP = 300;
     final Color TEXT_COLOR = Color.white;
@@ -69,9 +69,9 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setTitle("Game Frame");
         this.setLayout(new BorderLayout());
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6));
+        this.setSize(FRAME_WIDTH,HEADER_SIZE*2 + (int)(MyPanel.SIZE*1.6) + 5);
         this.setLocationRelativeTo(null);
-        this.setResizable(false);
+        this.setResizable(true);
         this.add(player2Container, BorderLayout.NORTH);
         this.add(boardGameContainer, BorderLayout.CENTER);
         this.add(player1Container, BorderLayout.SOUTH);
