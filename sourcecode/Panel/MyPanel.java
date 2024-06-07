@@ -1,5 +1,7 @@
 package sourcecode.Panel;
 
+import sourcecode.GamePieces.Tile;
+
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import java.awt.Color;
@@ -18,20 +20,16 @@ public abstract class MyPanel extends JPanel{
     final Color COLLECTING_COLOR = new Color(212, 175, 55);
     public static final int SIZE = 200;
     static final int MARGIN = 7;
-    private final int i;
+    private Tile tile;
     public JLabel gemsIndicator;
-    private int dan;
-    private int quan;
     private int isPointed = 0;
     private int isCollected = 0;
-    MyPanel(int i, int dan, int quan){
+    MyPanel(Tile tile){
         gemsIndicator = new JLabel();
         this.setLayout(null);
         setBackground(COLOR);
         this.setPreferredSize(new Dimension(SIZE / 2 + MARGIN + 2, (int) (SIZE*1.6)));
-        this.i = i;
-        this.dan = dan;
-        this.quan = quan;
+        this.tile = tile;
         this.add(gemsIndicator);
         this.setVisible(true);
     }
@@ -64,23 +62,23 @@ public abstract class MyPanel extends JPanel{
         if (isPointed == 1 || isCollected == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
         else gemsIndicator.setForeground(Color.black);
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
-        gemsIndicator.setText(String.valueOf((dan + quan)));
+        gemsIndicator.setText(String.valueOf((getDan() + getQuan())));
         repaint();
     }
     public int getI() {
-        return i;
+        return tile.getI();
     }
     public int getDan() {
-        return dan;
+        return tile.getDan();
     }
     public int getQuan() {
-        return quan;
+        return tile.getQuan();
     }
     public void setDan(int passDan) {
-        dan = passDan;
+        tile.setDan(passDan);
     }
     public void setQuan(int passQuan){
-        quan = passQuan;
+        tile.setQuan(passQuan);
     }
     public void setIsPointed(int i){isPointed = i;}
     public void setIsCollected(int i){isCollected = i;}

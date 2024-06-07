@@ -1,5 +1,7 @@
 package sourcecode.Panel;
 
+import sourcecode.GamePieces.Tile;
+
 import java.awt.*;
 
 public class SquarePanel extends MyPanel{
@@ -8,8 +10,8 @@ public class SquarePanel extends MyPanel{
     private boolean showArrow;
     private int arrowWidth;
     private String UoL;
-    public SquarePanel(String UoL, int i, int dan, int quan) {
-        super( i, dan, quan);
+    public SquarePanel(String UoL, Tile tile) {
+        super(tile);
         this.UoL = UoL;
         paintLeft = paintRight = false;
         showArrow = false;

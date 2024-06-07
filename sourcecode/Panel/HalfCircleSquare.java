@@ -1,11 +1,13 @@
 package sourcecode.Panel;
 
+import sourcecode.GamePieces.Tile;
+
 import java.awt.*;
 
 public class HalfCircleSquare extends MyPanel{
     String orientation;
-    public HalfCircleSquare(String ori, int i, int dan, int quan) {
-        super(i, dan, quan);
+    public HalfCircleSquare(String ori, Tile tile) {
+        super(tile);
         this.orientation = ori;
     }
     @Override
