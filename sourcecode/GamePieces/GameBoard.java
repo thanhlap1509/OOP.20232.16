@@ -102,7 +102,7 @@ public class GameBoard {
         parent.timer.setInitialDelay(10);
         parent.timer.start();
     }
-    public void recursiveSpreadGems(int startIndex, String direction){
+    private void recursiveSpreadGems(int startIndex, String direction){
         // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
         // we check if the next tile is outer tile or not
         // if not, we check if next tile has gem or not, if yes then spread gem again
@@ -167,7 +167,7 @@ public class GameBoard {
         parent.timer.setInitialDelay(10);
         parent.timer.start();
     }
-    public void checkIndexForward(){
+    private void checkIndexForward(){
         if (step == 1 && index == 12) index = 0;
         if (step == -1 && index == -1) index = 11;
     }
