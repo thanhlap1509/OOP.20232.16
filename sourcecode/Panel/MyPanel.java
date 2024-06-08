@@ -19,8 +19,9 @@ public abstract class MyPanel extends JPanel{
     final Color INDICATING_COLOR = Color.gray;
     final Color COLLECTING_COLOR = new Color(212, 175, 55);
     public static final int SIZE = 200;
-    static final int MARGIN = 7;
+    public static final int MARGIN = 7;
     private Tile tile;
+
     public JLabel gemsIndicator;
     MyPanel(Tile tile){
         gemsIndicator = new JLabel();
@@ -66,9 +67,6 @@ public abstract class MyPanel extends JPanel{
     }
     public void setDan(int passDan) {
         tile.setDan(passDan);
-    }
-    public void setQuan(int passQuan){
-        tile.setQuan(passQuan);
     }
     public int getIsPointed() {
         return tile.getIsPointed();
