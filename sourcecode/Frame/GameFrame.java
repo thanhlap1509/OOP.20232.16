@@ -18,8 +18,6 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 public class GameFrame extends JFrame implements MouseListener {
@@ -154,18 +152,15 @@ public class GameFrame extends JFrame implements MouseListener {
             player1Container.setPlayerInfoBorder(null);
             player2Container.setPlayerInfoBorder(compoundBorder2);
         }
-        timer = new Timer(1000, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (secondCountDown >= 0) {
-                    String string = String.format("Timer: %02d:%02d", secondCountDown / 60, secondCountDown % 60);
-                    timerLabel.setText(string);
-                    secondCountDown--;
-                } else {
-                    timer.stop();
-                    gameBoard.changeTurn();
-                    timerCountDown();
-                }
+        timer = new Timer(1000, e -> {
+            if (secondCountDown >= 0) {
+                String string = String.format("Timer: %02d:%02d", secondCountDown / 60, secondCountDown % 60);
+                timerLabel.setText(string);
+                secondCountDown--;
+            } else {
+                timer.stop();
+                gameBoard.changeTurn();
+                timerCountDown();
             }
         });
         timer.setInitialDelay(10);

@@ -6,8 +6,6 @@ import sourcecode.Player.Player;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -84,25 +82,21 @@ public class GameBoard {
         index += step;
         checkIndexForward();
         //spread gem from next tile
-        parent.timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
-
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (gemToSpread > 0){
-                    //add one gem to tile, and set index to next tile
-                    tiles[lastIndex].setIsPointed(0);
-                    tiles[index].setDan(tiles[index].getDan() + 1);
-                    tiles[index].setIsPointed(1);
-                    gemToSpread--;
-                    setGem(gemToSpread);
-                    lastIndex = index;
-                    index += step;
-                    checkIndexForward();
-                } else {
-                    parent.timer.stop();
-                    tiles[lastIndex].setIsPointed(0);
-                    recursiveSpreadGems(startIndex, direction);
-                }
+        parent.timer = new Timer(SECOND_TO_SLEEP, e -> {
+            if (gemToSpread > 0){
+                //add one gem to tile, and set index to next tile
+                tiles[lastIndex].setIsPointed(0);
+                tiles[index].setDan(tiles[index].getDan() + 1);
+                tiles[index].setIsPointed(1);
+                gemToSpread--;
+                setGem(gemToSpread);
+                lastIndex = index;
+                index += step;
+                checkIndexForward();
+            } else {
+                parent.timer.stop();
+                tiles[lastIndex].setIsPointed(0);
+                recursiveSpreadGems(startIndex, direction);
             }
         });
         parent.timer.setInitialDelay(10);
@@ -137,40 +131,37 @@ public class GameBoard {
     }
     private void addPoint(){
         final int[] iter = {0};
-        parent.timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (iter[0] < 6 && tiles[index].getDan() == 0){
-                    index+= step;
-                    checkIndexForward();
-                    tiles[lastIndex].setIsCollected(0);
-                    lastIndex = index;
-                    if (tiles[index].getDan() > 0){
-                        tiles[index].setIsCollected(1);
-                        int dan = tiles[index].getDan();
-                        int quan = tiles[index].getQuan();
-                        tiles[index].setDan(0);
-                        tiles[index].setQuan(0);
-                        if (turn == 1){
-                            player1.setPoint(player1.getPoint() + dan + quan*QUAN_POINT);
-                        }
-                        else if (turn == 2){
-                            player2.setPoint(player2.getPoint() + dan + quan*QUAN_POINT);
-                        }
+        parent.timer = new Timer(SECOND_TO_SLEEP, e -> {
+            if (iter[0] < 6 && tiles[index].getDan() == 0){
+                index+= step;
+                checkIndexForward();
+                tiles[lastIndex].setIsCollected(0);
+                lastIndex = index;
+                if (tiles[index].getDan() > 0){
+                    tiles[index].setIsCollected(1);
+                    int dan = tiles[index].getDan();
+                    int quan = tiles[index].getQuan();
+                    tiles[index].setDan(0);
+                    tiles[index].setQuan(0);
+                    if (turn == 1){
+                        player1.setPoint(player1.getPoint() + dan + quan*QUAN_POINT);
                     }
-                    else {
-                        parent.timer.stop();
-                        tiles[lastIndex].setIsCollected(0);
-                        parent.afterTurnAction();
+                    else if (turn == 2){
+                        player2.setPoint(player2.getPoint() + dan + quan*QUAN_POINT);
                     }
-                    index += step;
-                    checkIndexForward();
-                    iter[0]++;
-                }else {
+                }
+                else {
                     parent.timer.stop();
                     tiles[lastIndex].setIsCollected(0);
                     parent.afterTurnAction();
                 }
+                index += step;
+                checkIndexForward();
+                iter[0]++;
+            }else {
+                parent.timer.stop();
+                tiles[lastIndex].setIsCollected(0);
+                parent.afterTurnAction();
             }
         });
         parent.timer.setInitialDelay(10);
