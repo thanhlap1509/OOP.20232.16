@@ -57,10 +57,10 @@ public class GameFrame extends JFrame implements MouseListener {
         this.add(player1Container, BorderLayout.SOUTH);
         this.setVisible(true);
     }
-    private void createGameBoard(){
+    public void createGameBoard(){
         gameBoard = new GameBoard(this);
     }
-    private void createGameBoardContainer(){
+    public void createGameBoardContainer(){
         //Board game
         boardGameContainer = new JPanel();
         tiles = new MyPanel[12];
@@ -98,7 +98,7 @@ public class GameFrame extends JFrame implements MouseListener {
         boardGameContainer.add(centerTiles, BorderLayout.CENTER);
         boardGameContainer.add(tiles[5], BorderLayout.EAST);
     }
-    private void initializePlayerContainer(){
+    public void initializePlayerContainer(){
         //create two border, one for apply padding, one to paint with color and combine into compound border to indicate turn
         Border paddingBorder1 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
         Border paddingBorder2 = BorderFactory.createEmptyBorder(0, 0, 0, 5);
@@ -115,7 +115,7 @@ public class GameFrame extends JFrame implements MouseListener {
 
         player1Container.addPlayerInfo();
     }
-    private void createTimer(){
+    public void createTimer(){
         //initiate timer label
         timerLabel = new JLabel();
         timerLabel.setFont(new Font("Arial", Font.BOLD, 18));
@@ -126,7 +126,7 @@ public class GameFrame extends JFrame implements MouseListener {
         timerLabel.setHorizontalTextPosition(JLabel.LEFT);
         timerLabel.setBounds(0, 0, 150, 50);
     }
-    private void createGemIndicator(){
+    public void createGemIndicator(){
         //set up gem indicator
         gemInHand = new JLabel();
         gemInHand.setFont(new Font("Arial", Font.BOLD, 18));
@@ -138,7 +138,7 @@ public class GameFrame extends JFrame implements MouseListener {
         gemInHand.setBounds(0, 0, FRAME_WIDTH - 15, 50);
         gemInHand.setText("Gem: 0");
     }
-    private void timerCountDown(){
+    public void timerCountDown(){
         updateText1();
         updateText2();
         checkEndGame();
@@ -187,13 +187,13 @@ public class GameFrame extends JFrame implements MouseListener {
         checkLowerRow();
         timerCountDown();
     }
-    private void updateText1() {
+    public void updateText1() {
         player1Container.setPlayerInfoText();
     }
-    private void updateText2(){
+    public void updateText2(){
         player2Container.setPlayerInfoText();
     }
-    private void checkUpperRow(){
+    public void checkUpperRow(){
         int full0 = 1;
         for (int i = 6; i < 11; i++){
             if (tiles[i].getDan() != 0) {
@@ -209,7 +209,7 @@ public class GameFrame extends JFrame implements MouseListener {
             updateText2();
         }
     }
-    private void checkLowerRow(){
+    public void checkLowerRow(){
         int full0 = 1;
         for (int i = 0; i < 5; i++){
             if (tiles[i].getDan() != 0){
