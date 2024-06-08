@@ -35,7 +35,7 @@ public class GameFrame extends JFrame implements MouseListener {
     private Border compoundBorder1;
     private Border compoundBorder2;
     private int secondCountDown;
-    private Timer timer = null;
+    public Timer timer = null;
     private JPanel boardGameContainer;
     GameFrame() {
         //create header component
@@ -60,7 +60,7 @@ public class GameFrame extends JFrame implements MouseListener {
         this.setVisible(true);
     }
     private void createGameBoard(){
-        gameBoard = new GameBoard(this, timer, gemInHand);
+        gameBoard = new GameBoard(this);
     }
     private void createGameBoardContainer(){
         //Board game
@@ -298,5 +298,9 @@ public class GameFrame extends JFrame implements MouseListener {
             ((SquarePanel) e.getSource()).setPaintRight(false);
             ((JPanel) e.getSource()).setCursor(Cursor.getDefaultCursor());
         }
+    }
+
+    public void setText(String s) {
+        gemInHand.setText(s);
     }
 }

@@ -21,16 +21,12 @@ public class GameBoard {
     private int step = 0;
     private int lastIndex;
     public Tile[] tiles;
-    public Timer timer = null;
-    private JLabel gemInHand;
     private int turn;
     public Player player1;
     public Player player2;
     private GameFrame parent;
-    public GameBoard(GameFrame parent, Timer timer, JLabel gemInHand){
+    public GameBoard(GameFrame parent){
         this.parent = parent;
-        this.timer = timer;
-        this.gemInHand = gemInHand;
         tiles = new Tile[12];
         for (int i = 0; i < 12; i++){
             if (i == 5 || i == 11) tiles[i] = new Tile(i, 0, 1);
@@ -88,7 +84,7 @@ public class GameBoard {
         index += step;
         checkIndexForward();
         //spread gem from next tile
-        timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
+        parent.timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
 
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -103,14 +99,14 @@ public class GameBoard {
                     index += step;
                     checkIndexForward();
                 } else {
-                    timer.stop();
+                    parent.timer.stop();
                     tiles[lastIndex].setIsPointed(0);
                     recursiveSpreadGems(startIndex, direction);
                 }
             }
         });
-        timer.setInitialDelay(10);
-        timer.start();
+        parent.timer.setInitialDelay(10);
+        parent.timer.start();
     }
     public void recursiveSpreadGems(int startIndex, String direction){
         // TODO:SPREAD GEM RECURSIVELY AND/OR GET POINT
@@ -141,7 +137,7 @@ public class GameBoard {
     }
     private void addPoint(){
         final int[] iter = {0};
-        timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
+        parent.timer = new Timer(SECOND_TO_SLEEP, new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (iter[0] < 6 && tiles[index].getDan() == 0){
@@ -163,7 +159,7 @@ public class GameBoard {
                         }
                     }
                     else {
-                        timer.stop();
+                        parent.timer.stop();
                         tiles[lastIndex].setIsCollected(0);
                         parent.afterTurnAction();
                     }
@@ -171,21 +167,21 @@ public class GameBoard {
                     checkIndexForward();
                     iter[0]++;
                 }else {
-                    timer.stop();
+                    parent.timer.stop();
                     tiles[lastIndex].setIsCollected(0);
                     parent.afterTurnAction();
                 }
             }
         });
-        timer.setInitialDelay(10);
-        timer.start();
+        parent.timer.setInitialDelay(10);
+        parent.timer.start();
     }
     public void checkIndexForward(){
         if (step == 1 && index == 12) index = 0;
         if (step == -1 && index == -1) index = 11;
     }
     private void setGem(int gems){
-        gemInHand.setText("Gem: " + gems);
+        parent.setText("Gem: " + gems);
     }
     public void changeTurn(){
         // change turn
