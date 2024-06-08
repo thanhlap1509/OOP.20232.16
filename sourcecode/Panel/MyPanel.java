@@ -22,8 +22,6 @@ public abstract class MyPanel extends JPanel{
     static final int MARGIN = 7;
     private Tile tile;
     public JLabel gemsIndicator;
-    private int isPointed = 0;
-    private int isCollected = 0;
     MyPanel(Tile tile){
         gemsIndicator = new JLabel();
         this.setLayout(null);
@@ -39,8 +37,8 @@ public abstract class MyPanel extends JPanel{
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setStroke(new BasicStroke(2));
-        if (isPointed == 1) g2D.setPaint(INDICATING_COLOR);
-        else if (isCollected == 1) g2D.setPaint(COLLECTING_COLOR);
+        if (tile.getIsPointed() == 1) g2D.setPaint(INDICATING_COLOR);
+        else if (tile.getIsCollected() == 1) g2D.setPaint(COLLECTING_COLOR);
         else g2D.setPaint(BACKGROUND_COLOR);
         drawTiles(g2D);
         drawGems(g2D);
@@ -50,16 +48,8 @@ public abstract class MyPanel extends JPanel{
     public void drawGems(Graphics2D g2D){
     }
 
-    public int getIsPointed() {
-        return isPointed;
-    }
-
-    public int getIsCollected() {
-        return isCollected;
-    }
-
     public void setGemsIndicator(){
-        if (isPointed == 1 || isCollected == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
+        if (tile.getIsPointed() == 1 || tile.getIsCollected() == 1) gemsIndicator.setForeground(BACKGROUND_COLOR);
         else gemsIndicator.setForeground(Color.black);
         gemsIndicator.setFont(new Font("Arial", Font.BOLD, 12));
         gemsIndicator.setText(String.valueOf((getDan() + getQuan())));
@@ -80,7 +70,12 @@ public abstract class MyPanel extends JPanel{
     public void setQuan(int passQuan){
         tile.setQuan(passQuan);
     }
-    public void setIsPointed(int i){isPointed = i;}
-    public void setIsCollected(int i){isCollected = i;}
+    public int getIsPointed() {
+        return tile.getIsPointed();
+    }
+
+    public int getIsCollected() {
+        return tile.getIsCollected();
+    }
 
 }
