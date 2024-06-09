@@ -281,7 +281,7 @@ public class GameFrame extends JFrame implements MouseListener {
             if ((gameBoard.getTurn() == 1 && ((SquarePanel) e.getSource()).getUoL().equals("lower"))
                     || (gameBoard.getTurn() == 2 && ((SquarePanel) e.getSource()).getUoL().equals("upper"))){
                 ((SquarePanel) e.getSource()).setArrow(true);
-                ((JPanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+                ((SquarePanel) e.getSource()).setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
             }
         }
     }

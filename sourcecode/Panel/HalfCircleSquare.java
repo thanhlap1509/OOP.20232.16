@@ -6,7 +6,6 @@ import java.awt.*;
 
 public class HalfCircleSquare extends MyPanel{
     private String orientation;
-    private
     final int MAX_GEM_PER_CIRCLE = 6;
     private int surplus = 0;
     private int mark = 0;
@@ -33,6 +32,10 @@ public class HalfCircleSquare extends MyPanel{
     }
     @Override
     public void drawGems(Graphics2D g2D){
+        surplus = 0;
+        mark = 0;
+        range = 0;
+        reachMax = 0;
         if (this.getIsCollected() == 1 || this.getIsPointed() == 1) g2D.setPaint(BACKGROUND_COLOR);
         else g2D.setPaint(Color.black);
         int dan = getDan();
