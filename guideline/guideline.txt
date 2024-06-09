@@ -1,9 +1,11 @@
     1. The gameboard consists of 10 squares, divided into 2 rows, and 2 half-circle on the 2 ends of the board.
     Initially, each square has 5 small gems, and each half-circle has 1 big gem. Each small gem equals 1 point, and each big
     gem equals 5 points.
+
     2. Each turn, a player select a square and a direction to spread the gems. The player got points when after finishing
     spreading, there is one empty square followed by a square with gems. The score for that turn is equal the number of gems
     in that followed square. If the following squares share the same pattern of one empty square and one square with gems, the
     player point will increase by the amount of gem in that square. Theoretically, a player can clear the whole gameboard this
     way.
+
     3. The game ends when there is no gem in both half circles.

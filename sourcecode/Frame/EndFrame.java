@@ -1,6 +1,7 @@
 package sourcecode.Frame;
+import sourcecode.Player.Player;
+
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 public class EndFrame extends JFrame{
@@ -12,17 +13,17 @@ public class EndFrame extends JFrame{
     private JPanel playerInfo;
     private JLabel player1Info;
     private JLabel player2Info;
-    EndFrame(ImageIcon player1Icon, ImageIcon player2Icon, String name1, String name2, int point1, int point2){
+    EndFrame(Player player1, Player player2){
         winnerDisplay = new JLabel();
         winnerDisplay.setHorizontalAlignment(JLabel.CENTER);
         winnerDisplay.setFont(new Font("Arial", Font.BOLD, 30));
         winnerDisplay.setBackground(BACKGROUND_COLOR);
         winnerDisplay.setOpaque(true);
         winnerDisplay.setForeground(TEXT_COLOR);
-        if (point1 > point2){
-            winnerDisplay.setText(name1 + " win");
-        }else if (point2 > point1){
-            winnerDisplay.setText(name2 + " win");
+        if (player1.getPoint() > player2.getPoint()){
+            winnerDisplay.setText(player1.getName() + " win");
+        }else if (player2.getPoint() > player1.getPoint()){
+            winnerDisplay.setText(player2.getName() + " win");
         } else winnerDisplay.setText("Tie");
         winnerDisplay.setBounds(0, 0, 688, 100);
 
@@ -32,8 +33,8 @@ public class EndFrame extends JFrame{
         playerInfo.setBackground(BACKGROUND_COLOR);
 
         player1Info = new JLabel();
-        player1Info.setIcon(player1Icon);
-        player1Info.setText("<html><div style='text-align:center;'>"+ name1 + "<br>Points:"  + point1 + "</div></html>");
+        player1Info.setIcon(player1.getPlayerImgIcon());
+        player1Info.setText("<html><div style='text-align:center;'>"+ player1.getName() + "<br>Points:"  + player1.getPoint() + "</div></html>");
         player1Info.setHorizontalAlignment(JLabel.CENTER);
         player1Info.setHorizontalTextPosition(JLabel.CENTER);
         player1Info.setVerticalTextPosition(JLabel.BOTTOM);
@@ -41,8 +42,8 @@ public class EndFrame extends JFrame{
         playerInfo.add(player1Info);
 
         player2Info = new JLabel();
-        player2Info.setIcon(player2Icon);
-        player2Info.setText("<html><div style='text-align:center;'>"+ name2 + "<br>Points:"  + point2 + "</div></html>");
+        player2Info.setIcon(player2.getPlayerImgIcon());
+        player2Info.setText("<html><div style='text-align:center;'>"+ player2.getName() + "<br>Points:"  + player2.getPoint() + "</div></html>");
         player2Info.setHorizontalAlignment(JLabel.CENTER);
         player2Info.setHorizontalTextPosition(JLabel.CENTER);
         player2Info.setVerticalTextPosition(JLabel.BOTTOM);
