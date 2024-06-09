@@ -7,8 +7,7 @@
 - Implement user interface and game engine
 - Design presentation
 ## Use Case
-![image](![image]()
-)
+![Use Case Diagram](https://github.com/thanhlap1509/OOP.20232.16/assets/114226005/ab114dd7-e1a6-44c3-8081-42a07ce17ab8)
 ## Tech Stack
 - Swing
 - Java
