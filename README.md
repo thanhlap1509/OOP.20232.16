@@ -7,11 +7,12 @@
 - Implement user interface and game engine
 - Design presentation
 ## Use Case
-![image](https://github.com/thanhlap1509/OOP.20232.16/assets/114226005/9df0e850-d8e4-44de-9724-a78810161185)
+![image](![image](https://github.com/thanhlap1509/OOP.20232.16/assets/114226005/4fea3d66-f3f5-4f5f-aafd-dcd2c2bdc26a)
+)
 ## Tech Stack
 - Swing
 - Java
 - UML
 ## Setup/run instruction
 - Locate and run file "sourcecode/Main/Main.java"
-[Link Demo](https://drive.google.com/file/d/1WRs7lhF9eduQPEsq8DXdgw2r5MbDuavk/view?usp=sharing)
+[Link Demo](https://drive.google.com/file/d/1jffotwsh2h8Qcv748BlJoU6x9vWTBduF/view?usp=sharing)
