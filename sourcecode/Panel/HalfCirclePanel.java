@@ -4,14 +4,14 @@ import sourcecode.GamePieces.Tile;
 
 import java.awt.*;
 
-public class HalfCircleSquare extends MyPanel{
+public class HalfCirclePanel extends MyPanel{
     private String orientation;
     final int MAX_GEM_PER_CIRCLE = 6;
     private int surplus = 0;
     private int mark = 0;
     private int range;
     private int reachMax = 0;
-    public HalfCircleSquare(String ori, Tile tile) {
+    public HalfCirclePanel(String ori, Tile tile) {
         super(tile);
         this.orientation = ori;
     }

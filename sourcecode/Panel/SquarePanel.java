@@ -5,11 +5,11 @@ import sourcecode.GamePieces.Tile;
 import java.awt.*;
 
 public class SquarePanel extends MyPanel{
+    private String UoL;
     private boolean paintLeft;
     private boolean paintRight;
     private boolean showArrow;
     private int arrowWidth;
-    private String UoL;
     public SquarePanel(String UoL, Tile tile) {
         super(tile);
         this.UoL = UoL;
