@@ -1,6 +1,6 @@
 package sourcecode.Frame;
 import sourcecode.GamePieces.GameBoard;
-import sourcecode.Panel.HalfCircleSquare;
+import sourcecode.Panel.HalfCirclePanel;
 import sourcecode.Panel.MyPanel;
 import sourcecode.Panel.SquarePanel;
 import sourcecode.Player.PlayerContainer;
@@ -65,25 +65,25 @@ public class GameFrame extends JFrame implements MouseListener {
         boardGameContainer = new JPanel();
         tiles = new MyPanel[12];
         //left tiles
-        tiles[11] = new HalfCircleSquare("left",gameBoard.tiles[11]);
+        tiles[11] = new HalfCirclePanel("left",gameBoard.tiles[11]);
         tiles[11].addMouseListener(this);
         //right tiles
-        tiles[5] = new HalfCircleSquare("right",gameBoard.tiles[5]);
+        tiles[5] = new HalfCirclePanel("right",gameBoard.tiles[5]);
         tiles[5].addMouseListener(this);
         //center tiles
         JPanel centerTiles = new JPanel();
         centerTiles.setLayout(new GridLayout(2, 1));
-        //upper row
         JPanel upper = new JPanel();
         upper.setLayout(new GridLayout(1, 5));
+        //upper row
         for (int i = 10; i > 5; i--){
             tiles[i] = new SquarePanel("upper", gameBoard.tiles[i]);
             tiles[i].addMouseListener(this);
             upper.add(tiles[i]);
         }
-        //lower row
         JPanel lower = new JPanel();
         lower.setLayout(new GridLayout(1, 5));
+        //lower row
         for (int i = 0; i < 5; i++){
             tiles[i] = new SquarePanel("lower", gameBoard.tiles[i]);
             tiles[i].addMouseListener(this);
